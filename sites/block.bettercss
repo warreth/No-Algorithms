@@ -1,28 +1,7 @@
-/* Youtube */
+/* Youtube Mobile */
 
 a[title="Shorts"],
-a[title="Home"],
-
-#title-text,
-.ytd-reel-shelf-renderer,
-
-#sections > :first-child,
-.ytd-notification-renderer:has(a[href*="shorts"]),
-#section-title,
-
-div[aria-label="Hide videos"],
-button[aria-label*="More videos"],
-
-.yt-tab-shape[tab-title="Shorts"],
-.ytChipShapeButtonReset[aria-label="Shorts"],
-.scwnr-content.single-column-watch-next-modern-panels[section-identifier="related-items"],
-.ytp-fullscreen-grid-main-content,
-.pivot-bar-item-tab.pivot-shorts,
-.ytd-rich-section-renderer[is-shorts],
-
-#related,
-
-a[title*="Next"]
+a[title="Home"]
 
 {
     display: none !important;
@@ -30,24 +9,26 @@ a[title*="Next"]
     width: 0 !important;
 }
 
-title {
-    content: "Youtube";
-}
+/* Youtube Desktop */
 
-if #playlist[hidden] in #secondary-inner {
-    #secondary:has(#secondary-inner) {
-        display: none !important;
-        height: 0 !important;
-        width: 0 !important;
-    }
-}
+/* Notifications (removed shorts and "important" notifications) */
+#sections > :first-child,
+ytd-notification-renderer:has(a[href*="shorts"]),
+#section-title,
 
-if not #playlist in #secondary-inner {
-    #secondary:has(#secondary-inner) {
-        display: none !important;
-        height: 0 !important;
-        width: 0 !important;
-    }
+/* Chanel Page (removed Shorts tab) */
+.yt-tab-shape[tab-title="Shorts"],
+
+/* Watch History Page (removed shorts tab) */
+.ytChipShapeButtonReset[aria-label="Shorts"],
+
+/* Video Page (removed reccomendations) */
+#related
+
+{
+    display: none !important;
+    height: 0 !important;
+    width: 0 !important;
 }
 
 /* Instagram */
@@ -59,10 +40,4 @@ article:has(span[style="line-height: 16px;"])
     display: none !important;
     height: 0 !important;
     width: 0 !important;
-}
-
-if not p in #pandas {
-    body {
-        background-color: green;
-    }
 }

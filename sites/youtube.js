@@ -1,29 +1,65 @@
-console.log(location.origin);
+// ============================================================
+// No Algorithms - YouTube Script
+// Purpose: Remove algorithmic surfaces and redirect the user
+//          to subscriptions-only browsing.
+// ============================================================
 
+// ------------------------------------------------------------
+// Environment Detection
+// ------------------------------------------------------------
+
+// Check if the current page is a YouTube host
 const isYouTubeHost =
   location.hostname === "youtube.com" ||
   location.hostname.endsWith(".youtube.com");
+
+// Target subscriptions page
 const subscriptionsPath = "/feed/subscriptions";
 const subscriptionsUrl = `${location.protocol}//${location.host}${subscriptionsPath}`;
 
-let removed_items = false;
+// ------------------------------------------------------------
+// Global State
+// ------------------------------------------------------------
+
 let observer;
 let previousLocationHref = location.href;
 
-function redirections(root = document) {
-  if (isYouTubeHost && location.pathname === "/") {
+// ============================================================
+// Redirection Logic
+// ============================================================
+
+/**
+ * Redirect algorithmic entry points (home + shorts)
+ * to the subscriptions feed.
+ */
+function redirections() {
+  if (!isYouTubeHost) return;
+
+  // Redirect homepage
+  if (location.pathname === "/") {
     window.location.replace(subscriptionsUrl);
   }
 
-  if (isYouTubeHost && location.pathname.startsWith("/shorts")) {
+  // Redirect shorts pages
+  if (location.pathname.startsWith("/shorts")) {
     window.location.replace(subscriptionsUrl);
   }
 
-  if (isYouTubeHost && location.pathname === subscriptionsPath) {
+  // Keep title clean on subscriptions page
+  if (location.pathname === subscriptionsPath) {
     document.title = "YouTube";
   }
 }
 
+
+// ============================================================
+// Link Rewriting
+// ============================================================
+
+/**
+ * Rewrite any "home" links to instead point to subscriptions.
+ * Also removes Shorts navigation links.
+ */
 function redirectHomeLinks(root = document) {
   root.querySelectorAll("a[href]").forEach((link) => {
     const href = link.getAttribute("href");
@@ -37,21 +73,34 @@ function redirectHomeLinks(root = document) {
     }
 
     const isHomePath = url.pathname === "/" && !url.search && !url.hash;
+
     const isYouTubeUrl =
       url.hostname === "youtube.com" || url.hostname.endsWith(".youtube.com");
 
+    // Rewrite home links to subscriptions
     if (isHomePath && isYouTubeUrl) {
       link.setAttribute("href", subscriptionsUrl);
       link.dataset.noalgHomeLink = "1";
     }
+
+    // Remove shorts links entirely
     else if (href.startsWith("/shorts")) {
-      link.parentElement.remove();
+      link.parentElement?.remove();
     }
   });
 }
 
+
+// ============================================================
+// Click Interception
+// ============================================================
+
+/**
+ * Force navigation to subscriptions if a rewritten
+ * "home" link is clicked.
+ */
 function forceSubscriptionsNavigation(event) {
-  if (event.button !== 0) return;
+  if (event.button !== 0) return; // Only left click
   if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
 
   const link = event.target.closest('a[data-noalg-home-link="1"]');
@@ -59,29 +108,58 @@ function forceSubscriptionsNavigation(event) {
 
   event.preventDefault();
   event.stopPropagation();
+
   window.location.assign(subscriptionsUrl);
 }
 
-function removeRecommendations(root = document) {
-  if (removed_items) return;
 
-  const shortsButton = root.querySelector(".pivot-bar-item-tab.pivot-shorts");
-  const subscriptionsButton = root.querySelector(".pivot-bar-item-tab.pivot-subs")
-  if (shortsButton && subscriptionsButton) {
-    shortsButton.parentElement.remove();
-    subscriptionsButton.parentElement.remove();
-    removed_items = true;
+// ============================================================
+// UI Cleanup
+// ============================================================
 
-    console.log("removed secondary");
-  }
+/**
+ * Moves the playlist ui to the bottom of the video. Runs every loaction change
+ */
+function movePlaylistLocation(root = document) {
+  const videoEl = document.querySelector("ytd-watch-flexy");
+  if (!videoEl) return;
+  if (!videoEl.hasAttribute("playlist")) {
+    const style = document.createElement("style");
+    style.textContent = "#secondary { display: none !important; width: 0 !important; }";
+    document.head.appendChild(style);
+
+    return;
+  };
+  if (videoEl.hasAttribute("theater")) return;
+
+  // Change layout to move playlist to bottom
+  videoEl.removeAttribute("is-two-columns_");
+  videoEl.setAttribute("is_single_column_", "");
+  moved_playlist_location = true;
 }
 
+
+// ============================================================
+// SPA Navigation Detection
+// ============================================================
+
+/**
+ * Detect when YouTube changes pages internally
+ * (pushState navigation).
+ */
 function runOnLocationChanged() {
   if (previousLocationHref === location.href) return;
+
   previousLocationHref = location.href;
   redirections();
+  movePlaylistLocation();
 }
 
+
+/**
+ * Hook into history navigation so redirects still trigger
+ * when YouTube performs SPA page changes.
+ */
 function setupLocationChangeListeners() {
   const { pushState, replaceState } = history;
 
@@ -101,18 +179,29 @@ function setupLocationChangeListeners() {
   window.addEventListener("hashchange", runOnLocationChanged);
 }
 
+
+// ============================================================
+// Initialization
+// ============================================================
+
+/**
+ * Main startup routine.
+ */
 function start() {
   redirections();
   redirectHomeLinks();
-  removeRecommendations();
+  movePlaylistLocation();
+
   setupLocationChangeListeners();
+
+  // Intercept navigation clicks
   document.addEventListener("click", forceSubscriptionsNavigation, true);
 
+  // Observe DOM changes (YouTube constantly mutates the page)
   observer = new MutationObserver(() => {
     requestAnimationFrame(() => {
       runOnLocationChanged();
       redirectHomeLinks();
-      removeRecommendations();
     });
   });
 
@@ -121,6 +210,11 @@ function start() {
     subtree: true
   });
 }
+
+
+// ============================================================
+// Boot Logic
+// ============================================================
 
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", start, { once: true });
