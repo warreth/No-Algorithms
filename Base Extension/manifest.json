@@ -5,14 +5,12 @@
   "description": "Removes algorithmic feeds from websites. No toggles.",
   "content_scripts": [
     {
-      "matches": ["*://*.youtube.com/*"],
-      "js": ["Youtube/main.js"],
-      "css": ["Youtube/style.css"]
-    },
-    {
-      "matches": ["*://*.instagram.com/*"],
-      "js": ["Instagram/main.js"],
-      "css": ["Instagram/style.css"]
+      "matches": ["*://*.youtube.com/*", "*://*.instagram.com/*"],
+      "js": ["dist/main.js"]
     }
-  ]
+  ],
+  "web_accessible_resources": [{
+    "resources": ["sites/*", "sites/**/*"],
+    "matches": ["<all_urls>"]
+  }]
 }

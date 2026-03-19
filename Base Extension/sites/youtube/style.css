@@ -1,16 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
 
-/* Youtube Mobile */
+/* Sites Mobile */
 
 /* Home Page (removed shorts and home+shorts buttons on the bottom) */
 ytm-rich-section-renderer:has(a[href*="short"]),
 ytm-pivot-bar-item-renderer:has(.pivot-w2w),
 ytm-pivot-bar-item-renderer:has(.pivot-shorts),
 
-/* Video Page (removed reccomendations) */
+    /* Video Page (removed reccomendations) */
 [section-identifier="related-items"],
 
-/* Watch History Page */
+    /* Watch History Page */
 lazy-list > ytm-reel-shelf-renderer
 
 {
@@ -19,7 +19,7 @@ lazy-list > ytm-reel-shelf-renderer
     width: 0 !important;
 }
 
-/* Youtube Desktop */
+/* Sites Desktop */
 
 /* Video Page (removed reccomendations) */
 #related {
@@ -113,25 +113,14 @@ ytd-reel-shelf-renderer:has(#title) { display: none; width: 0; height: 0 ;}
 ytd-notification-renderer:has(a[href*="shorts"]),
 
 /* Home Page (removed shorts and home+shorts buttons) */
-ytd-rich-shelf-renderer[is-shorts],
-a[title="Shorts"],
-a[title="Home"]
+ytd-guide-section-renderer:has(a[title="Shorts"]),
+ytd-guide-section-renderer:has(a[title="Music"]),
+ytd-rich-shelf-renderer:has(a[href*="shorts"])
 
 {
-    filter: blur(2.5px);
-    pointer-events: none; /* <- makes them completely dead */
-    z-index: 9999; /* optional, can help if some child has weird layering */
-}
-
-/* Instagram */
-
-a[href="/reels/"],
-a[href="/explore/"],
-article:has(span[style="line-height: 16px;"])
-{
-    display: none !important;
-    height: 0 !important;
-    width: 0 !important;
+    height: 0;
+    width: 0;
+    display: none;
 }
 
 /* Animations */

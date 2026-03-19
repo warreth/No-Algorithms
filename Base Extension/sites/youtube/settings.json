@@ -1,0 +1,12 @@
+{
+  "website_name": "youtube",
+  "home_path": "/feed/subscriptions",
+  "blocked_paths": ["/shorts/*", "/"],
+  "remove_links_to_path": ["/shorts"],
+  "custom_path_titles": [
+    {
+      "path": "/feed/subscriptions",
+      "title": "YouTube"
+    }
+  ]
+}

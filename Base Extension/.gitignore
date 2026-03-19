@@ -1,0 +1,30 @@
+# Node modules
+/node_modules/
+
+# TypeScript output
+/dist/
+/build/
+/out/
+*.js
+*.js.map
+*.d.ts
+
+# Optional: VS Code settings
+.vscode/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS / Editor files
+.DS_Store
+Thumbs.db
+
+# Your existing ignores
+/shelf/
+/workspace.xml
+/queries/
+/dataSources/
+/dataSources.local.xml
+/httpRequests/
