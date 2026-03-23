@@ -21,6 +21,7 @@ class App {
   private settings!: Settings;
 
   private home_url!: string;
+  private slash_is_blocked!: boolean;
 
   constructor() {
     if (document.readyState === "loading") {
@@ -39,6 +40,9 @@ class App {
     console.log(`Site folders: ${siteFolders}`);
 
     for (const folder of siteFolders) {
+      if (!location.origin.includes(folder)) continue;
+
+      console.log(`Site folder: ${folder}`);
       const settingsUrl = chrome.runtime.getURL(`sites/${folder}/settings.json`);
       const cssUrl = chrome.runtime.getURL(`sites/${folder}/style.css`);
 
@@ -47,7 +51,10 @@ class App {
 
       this.settings = await settingsResponse.json();
       const css = await cssResponse.text();
-      this.Inject(css);
+      this.Inject(css, "style");
+
+      if (this.settings.blocked_paths.some(bp => bp === "/")) this.slash_is_blocked = true;
+
       break; // stop after first found site
     }
   }
@@ -55,11 +62,11 @@ class App {
   //#region Helper Functions
 
   // Inject CSS into document head
-  private Inject(css: string): void {
-    const style = document.createElement("style");
-    style.textContent = css;
+  private Inject(content: string, el_type: string): void {
+    const style = document.createElement(el_type);
+    style.textContent = content;
     document.head.appendChild(style);
-    console.log("Injected:\n" + css);
+    console.log("Injected:\n" + content);
   }
 
   // Check if current website matches the configured site
@@ -74,8 +81,8 @@ class App {
   // Determine if the current path should be redirected
   private ShouldRedirect(pathname: string): boolean {
     for (const blockedPath of this.settings.blocked_paths) {
-      if (pathname === blockedPath) return true;
-      if (pathname.startsWith(blockedPath)) return false;
+      if (pathname === "/" && this.slash_is_blocked) return true;
+      if (pathname.includes(blockedPath) && blockedPath !== "/") return true;
     }
     return false;
   }
@@ -119,11 +126,11 @@ class App {
         if (!href) return;
 
         // Remove links that start with remove_links_to_path
-        if (this.settings.remove_links_to_path.some(p => href.startsWith(p))) {
-            link.parentElement?.remove();
-            dataset.noalgProcessed = "1";
-            return;
-        }
+        // if (this.settings.remove_links_to_path.some(p => href.startsWith(p))) {
+        //     link.parentElement?.remove();
+        //     dataset.noalgProcessed = "1";
+        //     return;
+        // }
 
         let url: URL;
         try { url = new URL(href, location.origin); } catch {
@@ -133,17 +140,18 @@ class App {
 
         // Only target YouTube links
         const hostname = url.hostname;
-        if (!(hostname === "youtube.com" || hostname.endsWith(".youtube.com"))) {
+        if (!hostname.includes(this.settings.website_name)) {
             dataset.noalgProcessed = "1";
             return;
         }
 
         // Redirect blocked paths, handle root "/" specially
-        if (url.pathname === "/" && this.settings.blocked_paths.includes("/")) {
+        if (url.pathname === "/" && this.slash_is_blocked) {
             link.setAttribute("href", this.home_url);
             console.log(url.pathname);
             dataset.noalgHomeLink = "1";
-        } else if (this.settings.blocked_paths.some(bp => bp !== "/" && (url.pathname === bp || url.pathname.startsWith(bp)))) {
+            return;
+        } else if (this.settings.blocked_paths.some(bp => bp !== "/" && (url.pathname.includes(bp)))) {
             link.setAttribute("href", this.home_url);
             console.log(url.pathname);
             dataset.noalgHomeLink = "1";
@@ -227,6 +235,46 @@ class App {
       searchbox?.focus();
     });
   }
+
+  private TagInstagramRecommendations(): void {
+    document.querySelectorAll("article").forEach(article => {
+      if (article.getAttribute("isRecommendation")) return;
+
+      const isRecommendation = [...article.querySelectorAll("*")].some(el =>
+          el.textContent?.toLowerCase().includes("follow") ||
+          el.textContent?.toLowerCase().includes("suggested for you")
+      );
+
+      if (isRecommendation) {
+        article.setAttribute("isRecommendation", "");
+      }
+    });
+  }
+
+  private RegulateInstagramSearch(): void {
+    const path = location.pathname;
+    if (path.startsWith("/explore"))
+    {
+      console.log("grrr");
+
+      if (path.includes("/search")) {
+        const searchResults = document.querySelector("ul");
+        searchResults?.children[0]?.setAttribute("remove_from_search", "");
+      }
+      else {
+        const main = document.querySelector("main");
+
+        if (main?.children?.length === 1) {
+          // This means it is the desktop version since there is no search bar
+          main?.setAttribute("remove_from_search", "");
+        }
+        else {
+          // Remove anything but the search bar for mobile
+          main?.children[1]?.setAttribute("remove_from_search", "");
+        }
+      }
+    }
+  }
   //#endregion
 
   //#region Run On Location Change Listener
@@ -266,6 +314,7 @@ class App {
 
     this.Redirections();
     this.AddInfoCardToRecommendations();
+    setInterval(this.TagInstagramRecommendations, 1000);
 
     this.SetupLocationChangeListeners();
 
@@ -275,7 +324,9 @@ class App {
       requestAnimationFrame(() => {
         this.RerouteLinks();
         this.AddInfoCardToRecommendations();
-        this.RenameDocumentTitle();
+        this.RegulateInstagramSearch();
+
+        if (this.settings.custom_path_titles) this.RenameDocumentTitle();
       });
     });
 
