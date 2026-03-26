@@ -15,21 +15,23 @@ A browser extension that removes short form content and algorithms from social m
 - Supports Chrome **and** Firefox natively
 
 ## Installation
-1. Go to the **Releases** page.
-2. Download the appropriate `.zip` file for Chrome or Firefox.
-3. Unzip the downloaded folder.
+### Option 1: Firefox (Recommended)
+You can easily install the extension directly from the official Firefox Add-ons store:
+👉 **[Download on Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/no-algorithms-warreth/)**
 
-### For Chrome:
-1. Navigate to `chrome://extensions` in Chrome.
-2. Enable **Developer Mode** in the top right of the screen.
-3. Click **Load Unpacked** in the top left of the screen.
-4. Navigate to the unzipped Chrome folder and select it.
-5. Enjoy 😉
+*(If that page isn't live yet, or you want a pre-release version, download the `.xpi` file from the **[Releases](https://github.com/WarreTh/No-Algorithms/releases)** page and drag it directly into Firefox to install it).*
+
+### Option 2: Chrome (Manual Install)
+Chrome requires you to manually load the extension.
+1. Go to the **[Releases](https://github.com/WarreTh/No-Algorithms/releases)** page.
+2. Download the latest `chrome-extension-[VERSION].zip`.
+3. Unzip the downloaded folder on your computer.
+4. Navigate to `chrome://extensions` in your Chrome browser.
+5. Enable **Developer Mode** in the top right of the screen.
+6. Click **Load Unpacked** in the top left of the screen.
+7. Navigate to your unzipped Chrome folder and select it.
+8. Enjoy 😉
 
 <img src="Assets/ChromeInstallation.gif" width="75%"/>
-
-### For Firefox:
-1. Navigate to `about:debugging#/runtime/this-firefox` in Firefox.
-2. Click **Load Temporary Add-on...**
-3. Select the `manifest.json` file inside the unzipped Firefox folder.
-4. Enjoy 😉
+## License
+This project is licensed under the GNU Affero General Public License v3.0 (AGPLv3). See the [LICENSE](LICENSE) file for details.

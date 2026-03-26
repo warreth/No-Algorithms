@@ -38,13 +38,13 @@ jobs:
         working-directory: "Base Extension/build/firefox"
         run: web-ext lint
 
-      - name: Create Zip Archives
+      - name: Create Zip and XPI Archives
         working-directory: "Base Extension/build"
         run: |
           cd chrome
           zip -r ../../chrome-extension-${{ env.VERSION }}.zip *
           cd ../firefox
-          zip -r ../../firefox-extension-${{ env.VERSION }}.zip *
+          zip -r ../../firefox-extension-${{ env.VERSION }}.xpi *
 
       - name: Upload Chrome Extension to GitHub Release
         uses: Shopify/upload-to-release@v2.0.0
@@ -56,8 +56,8 @@ jobs:
       - name: Upload Firefox Extension to GitHub Release
         uses: Shopify/upload-to-release@v2.0.0
         with:
-          name: firefox-extension-${{ env.VERSION }}.zip
-          path: Base Extension/firefox-extension-${{ env.VERSION }}.zip
+          name: firefox-extension-${{ env.VERSION }}.xpi
+          path: Base Extension/firefox-extension-${{ env.VERSION }}.xpi
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload and Publish to Mozilla Firefox Store

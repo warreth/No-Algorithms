@@ -36,7 +36,7 @@ class App {
 
       this.settings = await settingsResponse.json();
       const css = await cssResponse.text();
-      this.Inject(css, "style");
+      this.InjectCSS(css);
 
       if (this.settings.blocked_paths && this.settings.blocked_paths.some(bp => bp === "/")) {
         this.slash_is_blocked = true;
@@ -46,8 +46,8 @@ class App {
   }
 
   // Inject CSS into document head
-  private Inject(content: string, el_type: string): void {
-    const style = document.createElement(el_type);
+  private InjectCSS(content: string): void {
+    const style = document.createElement("style");
     style.textContent = content;
     document.head.appendChild(style);
   }
@@ -181,14 +181,6 @@ class App {
     // Run active rule initializations
     for (const rule of this.activeRules) {
         if (rule.onInit && this.settings) rule.onInit(this.settings);
-        
-        if (rule.intervals) {
-            for (const inv of rule.intervals) {
-                setInterval(() => {
-                  if (this.settings) inv.action(this.settings);
-                }, inv.intervalMs || 1000);
-            }
-        }
     }
 
     const observer = new MutationObserver(() => {

@@ -20,13 +20,4 @@ export interface SiteRule {
 
   /** Run every time the DOM is mutated */
   onMutation?: (settings: Settings) => void;
-
-  /** 
-   * An array of intervals to run.
-   * `intervalMs` is the delay in ms, default is 1000ms.
-   */
-  intervals?: {
-    intervalMs: number;
-    action: (settings: Settings) => void;
-  }[];
 }
