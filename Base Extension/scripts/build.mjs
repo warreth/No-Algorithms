@@ -20,7 +20,10 @@ const config = {
             man.browser_specific_settings = {
                 gecko: {
                     id: "no-algorithms@example.com",
-                    strict_min_version: "109.0"
+                    strict_min_version: "109.0",
+                    data_collection_permissions: {
+                        required: ["none"]
+                    }
                 }
             };
             return man;
