@@ -22,10 +22,7 @@ export const youtubeRule: SiteRule = {
             if(existingStyle) existingStyle.remove();
         }
 
-        if (!videoEl.hasAttribute("theater")) {
-            videoEl.removeAttribute("is-two-columns_");
-            videoEl.setAttribute("is_single_column_", "");
-        }
+        
 
         // Add info card to recommendations sidebar
         if (!document.querySelector("#info-card")) {

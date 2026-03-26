@@ -1,21 +1,29 @@
-/* Home Page (removes reels button and recommendations) */
-
-/* Hide reels links everywhere (including sidebars, explore grids, and profile tabs) */
-a[href*="/reels/"],
-a[href*="/reel/"],
-a[data-noalg-home-link="1"],
-div:has(> a[href*="/reels/"]),
-div:has(> a[href*="/reel/"])
+/* Hide generic reels tabs */
+a[href="/reels/"],
+a[href="/reels"],
+a[data-noalg-home-link="1"]
 {
     display: none !important;
 }
 
+/* Hide recommendations in feed */
 article[isRecommendation=""] {
     display: none !important;
 }
 
-/* DMs (removes reels sent) */
-
-div[role="button"]:has(svg[aria-label="Clip"]) {
+/* Prevent scrolling to the next video when viewing a single reel from DMs or Explore */
+body.noalg-reel-view [aria-label*="Next"],
+body.noalg-reel-view [aria-label*="next"],
+body.noalg-reel-view .coreSpriteRightChevron,
+body.noalg-reel-view ._aaqg ._aaqf,
+body.noalg-reel-view button:has(svg[aria-label="Next"])
+{
     display: none !important;
 }
+
+/* Remove the aggressive lock on main to prevent breaking DMs */
+
+ /* Hide generic explore tabs */ 
+ a[href^='/explore'] { display: none !important; }
+
+ body.noalg-reel-view svg[aria-label='Next'] { display: none !important; }

@@ -47,12 +47,20 @@ class App {
     return location.hostname.includes(this.settings.website_name);
   }
 
+  // Determine if a given path matches a blocked path rule
+  private IsPathBlocked(pathname: string, blockedPath: string): boolean {
+    if (blockedPath.startsWith("exact:")) {
+      return pathname === blockedPath.replace("exact:", "");
+    }
+    return pathname.includes(blockedPath) && blockedPath !== "/";
+  }
+
   // Determine if the current path should be redirected
   private ShouldRedirect(pathname: string): boolean {
     if (!this.settings || !this.settings.blocked_paths) return false;
     for (const blockedPath of this.settings.blocked_paths) {
       if (pathname === "/" && this.slash_is_blocked) return true;
-      if (pathname.includes(blockedPath) && blockedPath !== "/") return true;
+      if (this.IsPathBlocked(pathname, blockedPath)) return true;
     }
     return false;
   }
@@ -103,7 +111,7 @@ class App {
             link.setAttribute("href", this.home_url);
             dataset.noalgHomeLink = "1";
             return;
-        } else if (this.settings.blocked_paths.some(bp => bp !== "/" && (url.pathname.includes(bp)))) {
+        } else if (this.settings.blocked_paths.some(bp => bp !== "/" && this.IsPathBlocked(url.pathname, bp))) {
             link.setAttribute("href", this.home_url);
             dataset.noalgHomeLink = "1";
         }

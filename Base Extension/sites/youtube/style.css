@@ -42,7 +42,7 @@ lazy-list > ytm-reel-shelf-renderer
     opacity: 1;
     filter: blur(0px);
     transform: translateX(0);   /* start position */
-    animation: popSlideFade 4s forwards; /* triggers animation */
+    /* removed animation */ /* triggers animation */
 }
 
 #info-card {
@@ -180,4 +180,34 @@ ytd-guide-section-renderer[guide-persistent-and-visible]
         filter: blur(35px);
         margin-right: -65px;
     }
+}
+
+/* --- UBLOCK INSPIRED FAST HIDING --- */
+
+/* Hide the Mini Guide Shorts Button */
+ytd-mini-guide-entry-renderer:has(a[title="Shorts"]) {
+    display: none !important;
+}
+
+/* Hide the Main Guide Shorts Button */
+ytd-guide-entry-renderer:has(a[title="Shorts"]) {
+    display: none !important;
+}
+
+/* Hard-hide "More from YouTube" */
+ytd-guide-section-renderer:has([title="More from YouTube"]),
+ytd-guide-section-renderer:has(a[href="/premium"]),
+ytd-guide-section-renderer:has(a[href="/gaming"]),
+ytd-guide-section-renderer:has(a[href="/channel/UC-9-kyTW8ZkZNDHQJ6FgwNA"]) {
+    display: none !important;
+}
+
+/* Fix whitespace above comments by hiding empty related sections completely */
+ytd-watch-next-secondary-results-renderer,
+ytd-item-section-renderer[target-id="watch-next-feed"] {
+    display: none !important;
+}
+
+#related {
+    display: none !important;
 }

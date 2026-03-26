@@ -1,6 +1,14 @@
 {
   "website_name": "instagram",
   "home_path": "/",
-  "blocked_paths": ["/reels"],
-  "remove_links_to_path": ["/reels"]
-}
+  "blocked_paths": [
+    "exact:/reels/",
+    "exact:/reels",
+    "/explore"
+  ],
+  "remove_links_to_path": [
+    "exact:/reels/",
+    "exact:/reels",
+    "/explore"
+  ]
+}}
