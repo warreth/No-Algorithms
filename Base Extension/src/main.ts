@@ -122,6 +122,10 @@ class App {
 
     if (!link) return;
 
+    // Only force behavior on our explicitly rerouted links.
+    // Otherwise, we break Instagram's SPA reactivity (like Search/Notifications opening).
+    if (link.dataset.noalgHomeLink !== "1") return;
+
     event.preventDefault();
     event.stopPropagation();
     window.location.assign(link.href);

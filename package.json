@@ -1,0 +1,12 @@
+{
+  "name": "no-algorithms-root",
+  "private": true,
+  "scripts": {
+    "pack": "cd \"Base Extension\" && npm run pack",
+    "build": "cd \"Base Extension\" && npm run build",
+    "build:all": "cd \"Base Extension\" && npm run build:all",
+    "dev:firefox": "cd \"Base Extension\" && npm run dev:firefox",
+    "watch": "cd \"Base Extension\" && npm run watch",
+    "install": "cd \"Base Extension\" && npm install"
+  }
+}

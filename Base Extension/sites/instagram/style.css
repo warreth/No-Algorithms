@@ -1,12 +1,11 @@
-/* Home Page (removed reels and explore buttons. removed recommendations)*/
+/* Home Page (removes reels button and recommendations) */
 
-/* this one is like this cuz the "/reels" got rerouted */
-div:has(> span > div > a[href*="instagram"])
-
+/* Hide reels links everywhere (including sidebars, explore grids, and profile tabs) */
+a[href*="/reels/"],
+a[href*="/reel/"],
+a[data-noalg-home-link="1"]
 {
-    width: 0;
-    height: 0;
-    display: none;
+    display: none !important;
 }
 
 article[isRecommendation=""] {
@@ -20,20 +19,4 @@ article[isRecommendation=""] {
 div[role="button"]:has(svg[aria-label="Clip"]) {
     filter: blur(25px);
     pointer-events: none;       /* block all clicks */
-}
-
-/* Account Page (removed reels section) */
-
-div:has(> a[href="https://www.instagram.com/"]) {
-    width: 0;
-    height: 0;
-    display: none;
-}
-
-/* Search Page (removed reels) */
-
-*[remove_from_search=""] {
-    display: none;
-    height: 0;
-    width: 0;
 }

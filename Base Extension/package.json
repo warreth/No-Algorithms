@@ -2,14 +2,18 @@
   "devDependencies": {
     "@types/chrome": "^0.1.38",
     "@types/node": "^25.5.0",
+    "concurrently": "^9.2.1",
     "esbuild": "^0.27.4",
-    "typescript": "^5.9.3"
+    "nodemon": "^3.1.14",
+    "typescript": "^5.9.3",
+    "web-ext": "^10.0.0"
   },
   "scripts": {
     "build": "esbuild src/main.ts --bundle --outfile=dist/main.js --target=chrome89 --format=iife",
-    "watch": "tsc --watch",
     "build:all": "node scripts/build.mjs",
-    "pack": "node scripts/pack.mjs"
+    "pack": "node scripts/pack.mjs",
+    "watch": "nodemon --watch src --watch sites --ext ts,css,json --exec \"npm run build:all\"",
+    "dev:firefox": "concurrently \"npm run watch\" \"web-ext run -s build/firefox\""
   },
   "name": "no-algorithms-warreth",
   "author": "WarreTh",
