@@ -1,6 +1,7 @@
 # No Algorithms by WarreTh
 
-> **Note:** This is a fork of [No-Algorithms](https://github.com/thejoeman23/No-Algorithms) by thejoeman23. 
+> [!NOTE]
+> This is a fork of [No-Algorithms](https://github.com/thejoeman23/No-Algorithms) by thejoeman23. 
 > This fork adds **Firefox** support, automated cross-browser build pipelines, better modularity, and more features.
 
 A browser extension that removes short form content and algorithms from social media websites while keeping the main site intact.
@@ -20,7 +21,8 @@ A browser extension that removes short form content and algorithms from social m
 You can easily install the extension directly from the official Firefox Add-ons store:
 👉 **[Download on Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/no-algorithms/)**
 
-> [!NOTE] if you want a pre-release version, download the `.xpi` file from the **[Releases](https://github.com/WarreTh/No-Algorithms/releases)** page and drag it directly into Firefox to install it.
+> [!NOTE]
+> If you want a pre-release version, download the `.xpi` file from the **[Releases](https://github.com/WarreTh/No-Algorithms/releases)** page and drag it directly into Firefox to install it.
 
 ### Option 2: Chrome (Manual Install)
 Since Google restricts installing extensions from outside the Chrome Web Store, you must load and install it as an "Unpacked" developer extension using the `.zip` file:
