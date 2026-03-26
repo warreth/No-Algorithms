@@ -7,7 +7,18 @@
   "content_scripts": [
     {
       "matches": ["*://*.youtube.com/*", "*://*.instagram.com/*"],
-      "js": ["dist/main.js"]
+      "js": ["dist/main.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["*://*.youtube.com/*"],
+      "css": ["sites/youtube/style.css"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["*://*.instagram.com/*"],
+      "css": ["sites/instagram/style.css"],
+      "run_at": "document_start"
     }
   ],
   "web_accessible_resources": [{

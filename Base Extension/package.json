@@ -8,7 +8,8 @@
   "scripts": {
     "build": "esbuild src/main.ts --bundle --outfile=dist/main.js --target=chrome89 --format=iife",
     "watch": "tsc --watch",
-    "build:all": "node scripts/build.mjs"
+    "build:all": "node scripts/build.mjs",
+    "pack": "node scripts/pack.mjs"
   },
   "name": "no-algorithms-warreth",
   "author": "WarreTh",

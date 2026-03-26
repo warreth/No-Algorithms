@@ -3,9 +3,22 @@
 /* Sites Mobile */
 
 /* Home Page (removed shorts and home+shorts buttons on the bottom) */
-ytm-rich-section-renderer:has(a[href*="short"]),
+ytm-rich-section-renderer:has(a[href*="/shorts/"]),
+ytm-rich-item-renderer:has(a[href*="/shorts/"]),
+ytm-video-with-context-renderer:has(a[href*="/shorts/"]),
+ytm-item-section-renderer:has(a[href*="/shorts/"]),
 ytm-pivot-bar-item-renderer:has(.pivot-w2w),
 ytm-pivot-bar-item-renderer:has(.pivot-shorts),
+
+    /* Shorts Grid Elements */
+#contents.ytd-rich-grid-renderer ytd-rich-item-renderer:has(a[href*="/shorts/"]),
+#contents.ytd-rich-grid-renderer ytd-rich-section-renderer:has(a[href*="/shorts/"]),
+ytd-video-renderer:has(a[href*="/shorts/"]),
+ytd-grid-video-renderer:has(a[href*="/shorts/"]),
+ytd-compact-video-renderer:has(a[href*="/shorts/"]),
+ytd-reel-item-renderer,
+ytd-reel-shelf-renderer,
+ytd-rich-shelf-renderer[is-shorts],
 
     /* Video Page (removed reccomendations) */
 [section-identifier="related-items"],
@@ -115,7 +128,8 @@ ytd-notification-renderer:has(a[href*="shorts"]),
 /* Home Page (removed shorts and home+shorts buttons) */
 ytd-guide-section-renderer:has(a[title="Shorts"]),
 ytd-guide-section-renderer:has(a[title="Music"]),
-ytd-rich-shelf-renderer:has(a[href*="shorts"])
+ytd-rich-shelf-renderer:has(a[href*="shorts"]),
+ytd-guide-section-renderer[guide-persistent-and-visible]
 
 {
     height: 0;

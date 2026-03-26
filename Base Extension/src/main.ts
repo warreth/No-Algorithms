@@ -29,27 +29,16 @@ class App {
       if (!location.origin.includes(folder)) continue;
 
       const settingsUrl = chrome.runtime.getURL(`sites/${folder}/settings.json`);
-      const cssUrl = chrome.runtime.getURL(`sites/${folder}/style.css`);
 
-      const settingsResponse = await fetch(settingsUrl);
-      const cssResponse = await fetch(cssUrl);
+        const settingsResponse = await fetch(settingsUrl);
 
-      this.settings = await settingsResponse.json();
-      const css = await cssResponse.text();
-      this.InjectCSS(css);
+        this.settings = await settingsResponse.json();
 
       if (this.settings.blocked_paths && this.settings.blocked_paths.some(bp => bp === "/")) {
         this.slash_is_blocked = true;
       }
       break; 
     }
-  }
-
-  // Inject CSS into document head
-  private InjectCSS(content: string): void {
-    const style = document.createElement("style");
-    style.textContent = content;
-    document.head.appendChild(style);
   }
 
   // Check if current website matches the configured site
@@ -91,7 +80,7 @@ class App {
   // Reroute or remove links based on settings
   private RerouteLinks(): void {
     if (!this.settings || !this.settings.blocked_paths) return;
-    document.querySelectorAll("a[href]").forEach(link => {
+    document.querySelectorAll("a[href]:not([data-noalg-processed])").forEach(link => {
         const dataset = (link as HTMLElement).dataset;
         if (dataset.noalgProcessed) return;
 
@@ -183,15 +172,21 @@ class App {
         if (rule.onInit && this.settings) rule.onInit(this.settings);
     }
 
+    let timeoutId: number | null = null;
     const observer = new MutationObserver(() => {
-      requestAnimationFrame(() => {
-        this.RerouteLinks();
-        this.RenameDocumentTitle();
+      if (timeoutId === null) {
+        timeoutId = window.setTimeout(() => {
+          timeoutId = null;
+          requestAnimationFrame(() => {
+            this.RerouteLinks();
+            this.RenameDocumentTitle();
 
-        for (const rule of this.activeRules) {
-            if (rule.onMutation && this.settings) rule.onMutation(this.settings);
-        }
-      });
+            for (const rule of this.activeRules) {
+                if (rule.onMutation && this.settings) rule.onMutation(this.settings);
+            }
+          });
+        }, 150);
+      }
     });
 
     observer.observe(document.documentElement, {
