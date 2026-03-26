@@ -6,6 +6,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -16,33 +18,54 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        working-directory: Base Extension"
+        working-directory: "Base Extension"
         run: npm ci
 
       - name: Get Version
         id: version
-        # Remove 'v' prefix if it exists from tag name
         run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
 
       - name: Build Chrome and Firefox Extensions
-        working-directory: Base Extension"
+        working-directory: "Base Extension"
         run: node scripts/build.mjs
         env:
           NEW_VERSION: ${{ env.VERSION }}
 
+      - name: Install web-ext
+        run: npm install -g web-ext
+
+      - name: Lint Firefox Extension
+        working-directory: "Base Extension/build/firefox"
+        run: web-ext lint
+
       - name: Create Zip Archives
-        working-directory: Base Extension/build"
+        working-directory: "Base Extension/build"
         run: |
           cd chrome
           zip -r ../../chrome-extension-${{ env.VERSION }}.zip *
           cd ../firefox
           zip -r ../../firefox-extension-${{ env.VERSION }}.zip *
 
-      - name: Upload Release Assets
-        uses: softprops/action-gh-release@v1
+      - name: Upload Chrome Extension to GitHub Release
+        uses: Shopify/upload-to-release@v2.0.0
         with:
-          files: |
-            Base Extension/chrome-extension-${{ env.VERSION }}.zip
-            Base Extension/firefox-extension-${{ env.VERSION }}.zip
+          name: chrome-extension-${{ env.VERSION }}.zip
+          path: Base Extension/chrome-extension-${{ env.VERSION }}.zip
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Firefox Extension to GitHub Release
+        uses: Shopify/upload-to-release@v2.0.0
+        with:
+          name: firefox-extension-${{ env.VERSION }}.zip
+          path: Base Extension/firefox-extension-${{ env.VERSION }}.zip
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload and Publish to Mozilla Firefox Store
+        # Only runs if API keys are set AND the GitHub release is NOT marked as a "Pre-release" (Beta).
+        if: env.WEB_EXT_API_KEY != '' && env.WEB_EXT_API_SECRET != '' && github.event.release.prerelease == false
+        working-directory: "Base Extension"
+        run: web-ext sign --source-dir ./build/firefox --channel listed --api-key ${{ secrets.WEB_EXT_API_KEY }} --api-secret ${{ secrets.WEB_EXT_API_SECRET }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WEB_EXT_API_KEY: ${{ secrets.WEB_EXT_API_KEY }}
+          WEB_EXT_API_SECRET: ${{ secrets.WEB_EXT_API_SECRET }}
+

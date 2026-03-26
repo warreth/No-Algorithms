@@ -2,12 +2,15 @@
   "devDependencies": {
     "@types/chrome": "^0.1.38",
     "@types/node": "^25.5.0",
+    "esbuild": "^0.27.4",
     "typescript": "^5.9.3"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "esbuild src/main.ts --bundle --outfile=dist/main.js --target=chrome89 --format=iife",
     "watch": "tsc --watch",
     "build:all": "node scripts/build.mjs"
   },
+  "name": "no-algorithms-warreth",
+  "author": "WarreTh",
   "version": "1.0.0"
 }

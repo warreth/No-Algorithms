@@ -1,5 +1,6 @@
 {
-  "name": "No Algorithms",
+  "name": "No Algorithms by WarreTh",
+  "author": "WarreTh",
   "manifest_version": 3,
   "version": "1.0.0",
   "description": "Removes algorithmic feeds from websites. No toggles.",
