@@ -119,7 +119,7 @@ class App {
   // Reroute or remove links based on settings (fixed version)
   private RerouteLinks(root: Document | HTMLElement = document): void {
     root.querySelectorAll("a[href]").forEach(link => {
-        const dataset = link.dataset as DOMStringMap;
+        const dataset = (link as HTMLElement).dataset;
         if (dataset.noalgProcessed) return; // skip already processed
 
         const href = link.getAttribute("href");
@@ -290,13 +290,13 @@ class App {
     const self = this;
 
     history.pushState = function (...args: any[]): any {
-      const result = pushState.apply(this, args);
+      const result = pushState.apply(this, args as any);
       self.RunOnLocationChanged();
       return result;
     };
 
     history.replaceState = function (...args: any[]): any {
-      const result = replaceState.apply(this, args);
+      const result = replaceState.apply(this, args as any);
       self.RunOnLocationChanged();
       return result;
     };

@@ -1,10 +1,13 @@
 {
   "devDependencies": {
+    "@types/chrome": "^0.1.38",
     "@types/node": "^25.5.0",
     "typescript": "^5.9.3"
   },
   "scripts": {
     "build": "tsc",
-    "watch": "tsc --watch"
-  }
+    "watch": "tsc --watch",
+    "build:all": "node scripts/build.mjs"
+  },
+  "version": "1.0.0"
 }

@@ -1,0 +1,48 @@
+name: Release Extension
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: Base Extension"
+        run: npm ci
+
+      - name: Get Version
+        id: version
+        # Remove 'v' prefix if it exists from tag name
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
+
+      - name: Build Chrome and Firefox Extensions
+        working-directory: Base Extension"
+        run: node scripts/build.mjs
+        env:
+          NEW_VERSION: ${{ env.VERSION }}
+
+      - name: Create Zip Archives
+        working-directory: Base Extension/build"
+        run: |
+          cd chrome
+          zip -r ../../chrome-extension-${{ env.VERSION }}.zip *
+          cd ../firefox
+          zip -r ../../firefox-extension-${{ env.VERSION }}.zip *
+
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            Base Extension/chrome-extension-${{ env.VERSION }}.zip
+            Base Extension/firefox-extension-${{ env.VERSION }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
