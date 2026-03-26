@@ -3,20 +3,19 @@
 /* Hide reels links everywhere (including sidebars, explore grids, and profile tabs) */
 a[href*="/reels/"],
 a[href*="/reel/"],
-a[data-noalg-home-link="1"]
+a[data-noalg-home-link="1"],
+div:has(> a[href*="/reels/"]),
+div:has(> a[href*="/reel/"])
 {
     display: none !important;
 }
 
 article[isRecommendation=""] {
-    filter: blur(25px);
-    pointer-events: none;       /* block all clicks */
-    opacity: .5;
+    display: none !important;
 }
 
 /* DMs (removes reels sent) */
 
 div[role="button"]:has(svg[aria-label="Clip"]) {
-    filter: blur(25px);
-    pointer-events: none;       /* block all clicks */
+    display: none !important;
 }
