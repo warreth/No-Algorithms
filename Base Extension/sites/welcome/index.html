@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to No Algorithms</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .os-instruction { display: none; }
+        .os-instruction.active { display: block; }
+    </style>
 </head>
 <body>
     <div class="container" id="app">
@@ -48,36 +52,131 @@
         <!-- Step 3 -->
         <div class="step hidden" id="step-3">
             <header>
-                <h1>Locking it down (<span id="browser-name">Browser</span>)</h1>
+                <h1>Select your browser</h1>
             </header>
             <main>
-                <div id="chrome-instructions" class="instruction-box hidden">
-                    <p>Google Chrome makes it difficult to permanently lock a local extension. The easiest way to stop yourself is outside the browser:</p>
-                    <ol>
-                        <li>Install a system-wide blocker like <strong>Cold Turkey Blocker</strong> (Windows/Mac) or <strong>SelfControl</strong> (Mac).</li>
-                        <li>Block access to the <code>chrome://extensions</code> page entirely during your focus blocks so you can not click disable.</li>
-                        <li>Alternatively, use enterprise registry policies to lock it (advanced).</li>
-                    </ol>
+                <div id="browser-selection">
+                    <p>To give you precise locking instructions, select your exact browser below:</p>
+                    <div id="firefox-browsers" style="display: none; flex-direction: column; gap: 10px; margin-top: 15px;">
+                        <button class="primary-button browser-btn" data-browser="firefox">Firefox</button>
+                        <button class="primary-button browser-btn" data-browser="waterfox">Waterfox</button>
+                        <button class="primary-button browser-btn" data-browser="librewolf">LibreWolf</button>
+                        <button class="primary-button browser-btn" data-browser="fx-other">Other Custom Install</button>
+                    </div>
+                    <div id="chrome-browsers" style="display: none; flex-direction: column; gap: 10px; margin-top: 15px;">
+                        <button class="primary-button browser-btn" data-browser="chrome">Google Chrome</button>
+                        <button class="primary-button browser-btn" data-browser="chromium">Chromium / Ungoogled Chromium</button>
+                        <button class="primary-button browser-btn" data-browser="brave">Brave</button>
+                        <button class="primary-button browser-btn" data-browser="edge">Microsoft Edge</button>
+                        <button class="primary-button browser-btn" data-browser="cr-other">Other Chromium-based</button>
+                    </div>
                 </div>
+            </main>
+        </div>
 
-                <div id="firefox-instructions" class="instruction-box hidden">
-                    <p>In Firefox, you can force the extension to stay on using enterprise policies:</p>
-                    <ol>
-                        <li>In your Firefox installation folder, create a new folder called <code>distribution</code>.</li>
-                        <li>Inside it, create a file named <code>policies.json</code>.</li>
-                        <li>Paste this code:</li>
-                    </ol>
+        <!-- Step 4 -->
+        <div class="step hidden" id="step-4">
+            <header>
+                <h1>Locking it down (<span id="browser-name">Browser</span> on <span id="os-name">OS</span>)</h1>
+            </header>
+            <main>
+                <div class="instruction-box" id="final-instructions">
+                    
+                    <!-- FIREFOX SECTIONS -->
+                    <div id="instr-firefox" class="os-instruction">
+                        <p>In Firefox, you can force the extension to stay on using enterprise policies so the disable button becomes grayed out:</p>
+                        
+                            <div id="fx-win" class="os-instruction">
+                                <ol>
+                                    <li>Open your Firefox installation directory (typically <code>C:\Program Files\Mozilla Firefox\</code>).</li>
+                                    <li>Create a new folder called <code>distribution</code> if it does not exist.</li>
+                                    <li>Inside it, create a file named <code>policies.json</code> (you can use Notepad).</li>
+                                </ol>
+                            </div>
+                            
+                            <div id="fx-mac" class="os-instruction">
+                                <ol>
+                                    <li>Go to Applications, right-click Firefox, and select 'Show Package Contents'.</li>
+                                    <li>Navigate to <code>Contents/Resources/</code> and create a folder called <code>distribution</code>.</li>
+                                    <li>Inside it, create a file named <code>policies.json</code> using TextEdit.</li>
+                                </ol>
+                            </div>
+                            
+                            <div id="fx-linux" class="os-instruction">
+                                <ol>
+                                    <li>Open your terminal and run: <code>sudo mkdir -p /etc/firefox/policies</code> (This creates the policy folder as an administrator).</li>
+                                    <li>Create and open a file named <code>policies.json</code> inside that directory using a command-line editor like nano: <code>sudo nano /etc/firefox/policies/policies.json</code>. (Alternatively, log into your file manager as root to create the file).</li>
+                                </ol>
+                            </div>
+                            
+                            <div id="fx-other" class="os-instruction">
+                                <p style="margin-top: 10px; font-weight: 500;">To find your exact installation folder for any Firefox-based browser:</p>
+                                <ol>
+                                    <li>Open a new tab and go to <code>about:support</code></li>
+                                    <li>Scroll down to the <strong>Application Basics</strong> section.</li>
+                                    <li>Look for <strong>Application Binary</strong> to see exactly where your browser is installed.</li>
+                                    <li>Create a <code>distribution</code> folder in that exact same directory (next to the browser executable).</li>
+                                    <li>Inside it, create a file named <code>policies.json</code>.</li>
+                                </ol>
+                            </div>
+                            
+                            <ul>
+                                <li style="list-style-type: none; padding-left: 0; font-weight: bold; margin-top: 10px;">Paste this exact JSON code inside <code>policies.json</code>:</li>
+                            </ul>
 <pre><code>{
   "policies": {
-    "ExtensionSettings": {
-      "no-algorithms@example.com": {
-        "installation_mode": "force_installed",
-        "install_url": "file:///path/to/extension.xpi"
-      }
+    "Extensions": {
+      "Locked": ["<span id="ff-id-display">no-algorithms@example.com</span>"]
     }
   }
 }</code></pre>
-                    <p>Restart Firefox, and you will not be able to turn the extension off from the Add-ons menu anymore.</p>
+
+                        <p>Restart Firefox, and you will not be able to turn the extension off from the Add-ons menu anymore.</p>
+                    </div>
+
+                    <!-- CHROME SECTIONS -->
+                    <div id="instr-chrome" class="os-instruction">
+                        <p>You can use Enterprise Policies to "Force Install" your extension to lock the uninstall and disable switches.</p>
+                        
+                        <div id="cr-win" class="os-instruction">
+                            <ol>
+                                <li>Open your start menu or run dialog, type <code>regedit</code>, and hit Enter to open the Registry Editor.</li>
+                                <li>Navigate to <code id="win-reg-path"></code>. (If the folders don't exist, right-click and create them as a 'New &gt; Key').</li>
+                                <li>Right-click inside <code>ExtensionInstallForcelist</code>, select <strong>New &gt; String Value</strong>, and name it <code>1</code>.</li>
+                                <li>Double-click the new value and paste this exact text as its Data:
+                                    <br><code id="win-update-str" style="display: block; margin-top: 5px;"></code>
+                                </li>
+                            </ol>
+                        </div>
+                        <div id="cr-mac" class="os-instruction">
+                            <ol>
+                                <li>Open your <strong>Terminal</strong> (Press Cmd+Space, type <code>Terminal</code>, and hit Enter).</li>
+                                <li>Run the following command to inject the enterprise policy into your Mac's configuration:</li>
+                            </ol>
+                            <ul>
+                                <li style="list-style-type: none; padding-left: 0; margin-top: 10px;">
+                                    <pre><code id="mac-cmd-str"></code></pre>
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="cr-linux" class="os-instruction">
+                            <ol>
+                                <li>Open your terminal and run: <code id="linux-cmd-mkdir"></code> (This creates the policy folder as an administrator).</li>
+                                <li>Create and open a file named <code>lock_extension.json</code> using a command-line editor like nano: <code id="linux-cmd-nano"></code>.</li>
+                            </ol>
+                            <ul>
+                                <li style="list-style-type: none; padding-left: 0; font-weight: bold; margin-top: 10px;">Paste this exact JSON code inside <code>lock_extension.json</code>:</li>
+                            </ul>
+<pre><code id="linux-update-str"></code></pre>
+                            <p style="margin-top: 15px; font-size: 0.9em; opacity: 0.8;"><em>To undo this lock later, run: <code id="linux-cmd-undo"></code></em></p>
+                        </div>
+                        
+                        <ul>
+                            <li>Restart your browser. The extension will say "Managed by your organization" and can no longer be deleted or turned off!</li>
+                        </ul>
+                        <p><em>Note: If you load the extension as "unpacked", these policies might throw an invalid source error. Pack it (.crx) or put it in the webstore to flawlessly lock it.</em></p>
+                    </div>
+
                 </div>
             </main>
             <footer>

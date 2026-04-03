@@ -3,6 +3,11 @@
   "author": "WarreTh",
   "manifest_version": 3,
   "version": "1.0.0",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "no-algorithms@example.com"
+    }
+  },
   "description": "Removes algorithmic feeds from websites. No toggles.",
   "content_scripts": [
     {
