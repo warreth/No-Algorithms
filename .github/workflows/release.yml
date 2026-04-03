@@ -6,6 +6,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      WEB_EXT_API_KEY: ${{ secrets.WEB_EXT_API_KEY }}
+      WEB_EXT_API_SECRET: ${{ secrets.WEB_EXT_API_SECRET }}
+      CHROME_CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
+      CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
+      CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
+      CHROME_EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
     permissions:
       contents: write
     steps:
@@ -62,7 +69,7 @@ jobs:
 
       - name: Upload and Publish to Mozilla Firefox Store
         # Only runs if API keys are set AND the GitHub release is NOT marked as a "Pre-release" (Beta).
-        if: secrets.WEB_EXT_API_KEY != '' && secrets.WEB_EXT_API_SECRET != '' && github.event.release.prerelease == false
+        if: ${{ env.WEB_EXT_API_KEY != '' && env.WEB_EXT_API_SECRET != '' && github.event.release.prerelease == false }}
         working-directory: "Base Extension"
         run: web-ext sign --source-dir ./build/firefox --channel listed
         env:
@@ -71,7 +78,7 @@ jobs:
 
       - name: Upload and Publish to Chrome Web Store
         # Only runs if API credentials are set AND the GitHub release is NOT marked as a "Pre-release" (Beta).
-        if: secrets.CHROME_CLIENT_ID != '' && secrets.CHROME_CLIENT_SECRET != '' && secrets.CHROME_REFRESH_TOKEN != '' && secrets.CHROME_EXTENSION_ID != '' && github.event.release.prerelease == false
+        if: ${{ env.CHROME_CLIENT_ID != '' && env.CHROME_CLIENT_SECRET != '' && env.CHROME_REFRESH_TOKEN != '' && env.CHROME_EXTENSION_ID != '' && github.event.release.prerelease == false }}
         working-directory: "Base Extension"
         run: npx chrome-webstore-upload-cli upload --source chrome-extension-${{ env.VERSION }}.zip --auto-publish
         env:
