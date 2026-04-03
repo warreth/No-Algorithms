@@ -5,9 +5,10 @@
 /dist/
 /build/
 /out/
-*.js
-*.js.map
-*.d.ts
+# Ignore JS files in the root (but not everywhere, else sites/background.js gets ignored)
+/*.js
+/*.js.map
+/*.d.ts
 
 # Optional: VS Code settings
 .vscode/
