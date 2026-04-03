@@ -28,6 +28,9 @@ const config = {
                     data_collection_permissions: {
                         required: ["none"]
                     }
+                },
+                gecko_android: {
+                    strict_min_version: "142.0"
                 }
             };
             return man;
