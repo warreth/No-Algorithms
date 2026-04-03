@@ -12,11 +12,15 @@ const VERSION = process.env.NEW_VERSION || '1.0.0';
 // Configuration for modularity
 const config = {
     chrome: {
-        manifestModifiers: (man) => man // Chrome MV3 works as is
+        manifestModifiers: (man) => {
+            man.background = { service_worker: "sites/background.js" };
+            return man; // Chrome MV3 works as is
+        }
     },
     firefox: {
         manifestModifiers: (man) => {
             // Firefox specific MV3 requirements
+            man.background = { scripts: ["sites/background.js"], type: "module" };
             man.browser_specific_settings = {
                 gecko: {
                     id: "no-algorithms@example.com",

@@ -1,0 +1,140 @@
+:root {
+    --bg-color: #f9f9fb;
+    --text-color: #2c3e50;
+    --accent-color: #3b82f6;
+    --box-bg: #ffffff;
+    --border-color: #e2e8f0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 600px;
+    background: var(--box-bg);
+    border-radius: 12px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.step {
+    padding: 40px;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.hidden {
+    display: none;
+}
+
+.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.logo svg {
+    color: var(--accent-color);
+    margin-bottom: 10px;
+}
+
+h1 {
+    font-size: 2rem;
+    margin: 0 0 5px;
+    color: #1a202c;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    color: #4a5568;
+    margin-top: 5px;
+}
+
+main p {
+    font-size: 1.1rem;
+    color: #4a5568;
+    margin-bottom: 15px;
+}
+
+.instruction-box {
+    background-color: #f8fafc;
+    border-left: 4px solid var(--accent-color);
+    padding: 15px 20px;
+    border-radius: 4px;
+    margin: 20px 0;
+}
+
+ol {
+    padding-left: 20px;
+    color: #4a5568;
+}
+
+ol li {
+    margin-bottom: 10px;
+}
+
+pre {
+    background: #1e293b;
+    color: #f8f8f2;
+    padding: 12px;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9em;
+}
+
+code {
+    background: #e2e8f0;
+    color: #ef4444;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9em;
+}
+
+pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+}
+
+.primary-button {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: var(--accent-color);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    margin-top: 30px;
+}
+
+.primary-button:hover {
+    background-color: #2563eb;
+}
+
+.primary-button:active {
+    transform: scale(0.98);
+}

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to No Algorithms</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container" id="app">
+        
+        <!-- Step 1 -->
+        <div class="step active" id="step-1">
+            <header>
+                <div class="logo">
+                    <svg width="48" height="48" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                </div>
+                <h1>Welcome to No Algorithms</h1>
+                <p class="subtitle">Your feeds are now hidden.</p>
+            </header>
+            <main>
+                <p>We have removed the explore and recommended feeds on YouTube and Instagram. No endless scrolling, just the content you actually search for.</p>
+                <p>We did not add an easy pause button, because we know how tempting it is.</p>
+            </main>
+            <footer>
+                <button class="primary-button step-btn" data-target="step-2">Next</button>
+            </footer>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step hidden" id="step-2">
+            <header>
+                <h1>Discipline is hard.</h1>
+            </header>
+            <main>
+                <p>Browsers let you turn off extensions with a single click. When a craving hits, it is way too easy to just disable this block and start scrolling again.</p>
+                <p>If you really want to focus, you need to make it physically harder to disable this extension.</p>
+            </main>
+            <footer>
+                <button class="primary-button step-btn" data-target="step-3">Show me how</button>
+            </footer>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step hidden" id="step-3">
+            <header>
+                <h1>Locking it down (<span id="browser-name">Browser</span>)</h1>
+            </header>
+            <main>
+                <div id="chrome-instructions" class="instruction-box hidden">
+                    <p>Google Chrome makes it difficult to permanently lock a local extension. The easiest way to stop yourself is outside the browser:</p>
+                    <ol>
+                        <li>Install a system-wide blocker like <strong>Cold Turkey Blocker</strong> (Windows/Mac) or <strong>SelfControl</strong> (Mac).</li>
+                        <li>Block access to the <code>chrome://extensions</code> page entirely during your focus blocks so you can not click disable.</li>
+                        <li>Alternatively, use enterprise registry policies to lock it (advanced).</li>
+                    </ol>
+                </div>
+
+                <div id="firefox-instructions" class="instruction-box hidden">
+                    <p>In Firefox, you can force the extension to stay on using enterprise policies:</p>
+                    <ol>
+                        <li>In your Firefox installation folder, create a new folder called <code>distribution</code>.</li>
+                        <li>Inside it, create a file named <code>policies.json</code>.</li>
+                        <li>Paste this code:</li>
+                    </ol>
+<pre><code>{
+  "policies": {
+    "ExtensionSettings": {
+      "no-algorithms@example.com": {
+        "installation_mode": "force_installed",
+        "install_url": "file:///path/to/extension.xpi"
+      }
+    }
+  }
+}</code></pre>
+                    <p>Restart Firefox, and you will not be able to turn the extension off from the Add-ons menu anymore.</p>
+                </div>
+            </main>
+            <footer>
+                <button class="primary-button" id="close-btn">I am ready, close this</button>
+            </footer>
+        </div>
+
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
