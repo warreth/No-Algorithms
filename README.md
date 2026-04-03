@@ -34,5 +34,8 @@ Since Google restricts installing extensions from outside the Chrome Web Store, 
 
 <img src="Assets/ChromeInstallation.gif" width="75%"/>
 
+## Privacy Policy
+This extension runs completely locally and does not collect any user data. See the full [Privacy Policy](PRIVACY.md) for details.
+
 ## License
 This project is licensed under the GNU Affero General Public License v3.0 (AGPLv3). See the [LICENSE](LICENSE) file for details.
