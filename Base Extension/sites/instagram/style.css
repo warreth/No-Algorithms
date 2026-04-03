@@ -1,13 +1,15 @@
 /* Hide generic reels tabs */
 a[href="/reels/"],
 a[href="/reels"],
+a[og_href*="reels"],
+a[href*="reels"],
 a[data-noalg-home-link="1"]
 {
     display: none !important;
 }
 
 /* Hide recommendations in feed */
-article[isRecommendation=""] {
+article[isRecommendation="true"] {
     display: none !important;
 }
 

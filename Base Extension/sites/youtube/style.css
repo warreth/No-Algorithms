@@ -101,12 +101,9 @@ lazy-list > ytm-reel-shelf-renderer
 
 /* Chanel Page (removed Shorts tab) */
 .yt-tab-shape[tab-title="Shorts"] {
-    pointer-events: none;       /* block all clicks */
-    overflow: hidden;
-    width: auto;                /* keep natural width for the pop */
-    opacity: 1;
-    filter: blur(0px);
-    animation: shrinkFade 2s forwards;
+    display: none;
+    height: 0;
+    width: 0;
 }
 
 /* Watch History Page (removed shorts tab) */
@@ -114,22 +111,32 @@ ytd-reel-shelf-renderer:has(#title) { display: none; width: 0; height: 0 ;}
 
 .ytChipBarViewModelChipWrapper:has(button[aria-label="Shorts"])
 {
-    pointer-events: none;       /* block all clicks */
-    overflow: hidden;
-    width: auto;                /* keep natural width for the pop */
-    opacity: 1;
-    filter: blur(0px);
-    animation: shrinkFadeABitMore 2s forwards;
+    display: none;
+    height: 0;
+    width: 0;
 }
 
 /* Notifications (removed shorts) */
 ytd-notification-renderer:has(a[href*="shorts"]),
+ytd-notification-renderer:has(a[og_href*="shorts"]),
 
 /* Home Page (removed shorts and home+shorts buttons) */
 ytd-guide-section-renderer:has(a[title="Shorts"]),
 ytd-guide-section-renderer:has(a[title="Music"]),
 ytd-rich-shelf-renderer:has(a[href*="shorts"]),
-ytd-guide-section-renderer[guide-persistent-and-visible]
+ytd-rich-shelf-renderer:has(a[og_href*="shorts"]),
+ytd-guide-section-renderer[guide-persistent-and-visible],
+a[aria-label="Shorts"],
+a[aria-label="Home"]
+{
+    height: 0;
+    width: 0;
+    display: none;
+}
+/* Video Search Page */
+grid-shelf-view-model:has(a[og_href*="shorts"]),
+iron-selector > :nth-child(2),
+ytd-search-filter-renderer:has(div[title*="Shorts"])
 
 {
     height: 0;

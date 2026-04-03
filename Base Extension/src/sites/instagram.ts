@@ -39,12 +39,13 @@ export const instagramRule: SiteRule = {
                 'svg[aria-label="Close"], svg[aria-label="Hide"], svg[aria-label="Sluiten"], svg[aria-label="Verbergen"]'
             );
             if (hasCloseButton) {
-                article.setAttribute("isRecommendation", "");
+                article.setAttribute("isRecommendation", "true");
                 return;
             }
 
             // Fallback: Check text for known English markers
             const elements = Array.from(header.querySelectorAll("span, div"));
+            let isRecommendation = false;
             for (const el of elements) {
                 // Ignore elements that have nested elements
                 if (el.children.length === 0 && el.textContent) {
@@ -57,10 +58,15 @@ export const instagramRule: SiteRule = {
                         txt === "voorgesteld voor jou" ||
                         txt === "voorgesteld bericht"
                     ) {
-                        article.setAttribute("isRecommendation", "");
+                        isRecommendation = true;
                         break;
                     }
                 }
+            }
+            if (isRecommendation) {
+                article.setAttribute("isRecommendation", "true");
+            } else {
+                article.setAttribute("isRecommendation", "false");
             }
         });
     }

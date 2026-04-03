@@ -86,9 +86,9 @@ class App {
   }
 
   // Reroute or remove links based on settings
-  private RerouteLinks(): void {
+  private RerouteLinks(root: Document | HTMLElement = document): void {
     if (!this.settings || !this.settings.blocked_paths) return;
-    document.querySelectorAll("a[href]:not([data-noalg-processed])").forEach(link => {
+    root.querySelectorAll?.("a[href]:not([data-noalg-processed])").forEach((link: Element) => {
         const dataset = (link as HTMLElement).dataset;
         if (dataset.noalgProcessed) return;
 
@@ -108,10 +108,12 @@ class App {
         }
 
         if (url.pathname === "/" && this.slash_is_blocked) {
+            link.setAttribute("og_href", href); // store original href
             link.setAttribute("href", this.home_url);
             dataset.noalgHomeLink = "1";
             return;
         } else if (this.settings.blocked_paths.some(bp => bp !== "/" && this.IsPathBlocked(url.pathname, bp))) {
+            link.setAttribute("og_href", href); // store original href
             link.setAttribute("href", this.home_url);
             dataset.noalgHomeLink = "1";
         }
