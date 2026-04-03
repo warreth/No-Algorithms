@@ -13,7 +13,8 @@
     "build:all": "node scripts/build.mjs",
     "pack": "node scripts/pack.mjs",
     "watch": "nodemon --watch src --watch sites --ext ts,css,json --exec \"npm run build:all\"",
-    "dev:firefox": "concurrently \"npm run watch\" \"web-ext run -s build/firefox\""
+    "lint": "web-ext lint -s build/firefox",
+    "dev:firefox": "npm run build:all && npm run lint && concurrently \"npm run watch\" \"web-ext run -s build/firefox\""
   },
   "name": "no-algorithms-warreth",
   "author": "WarreTh",
