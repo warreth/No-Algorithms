@@ -24,13 +24,13 @@ You can easily install the extension directly from the official Firefox Add-ons 
 > [!NOTE]
 > If you want a pre-release version, download the `.xpi` file from the **[Releases](https://github.com/WarreTh/No-Algorithms/releases)** page and drag it directly into Firefox to install it.
 
-### Option 2: Chrome (Manual Install)
-Since Google restricts installing extensions from outside the Chrome Web Store, you must load and install it as an "Unpacked" developer extension using the `.zip` file:
+### Option 2: Chrome (Recommended)
 
-1. Download the latest `chrome-extension-[VERSION].zip` from the **[Releases](https://github.com/WarreTh/No-Algorithms/releases)** page and unzip it.
-2. Go to `chrome://extensions` in Chrome.
-3. Toggle **Developer Mode** on (top right).
-4. Click **Load Unpacked** (top left) and select the unzipped folder.
+You can easily install the extension directly from the official Chrome Web Store:
+👉 **[Download on Chrome Web Store](https://chromewebstore.google.com/detail/fcdiiaodicmddljfoceilmacapeppomi)**
+
+> [!NOTE]
+> If you want a pre-release version, you can install it manually by downloading the `chrome-extension-[VERSION].zip` file from the **[Releases](https://github.com/WarreTh/No-Algorithms/releases)** page. Unzip it, go to `chrome://extensions`, enable **Developer Mode**, and click **Load Unpacked** to select the folder.
 
 <img src="Assets/ChromeInstallation.gif" width="75%"/>
 
