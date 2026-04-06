@@ -4,11 +4,21 @@
 A browser extension that removes short form content and algorithms from social media websites while keeping the main site intact.
 
 
-## Features (YouTube & Instagram)
-- Removed the home page and replaced with subscriptions page (only watch what you signed up for)
-- Removed all Shorts or links to Shorts
-- Removed all recommendations
-- No off button or toggle 😲
+## Features
+
+### 📺 YouTube
+Take back your focus by removing the algorithmic home feed and shorts.
+
+**Before** ❌ | **After** ✅
+:---:|:---:
+![YouTube Before](Assets/Screenshots/yt-before.png) | ![YouTube After](Assets/Screenshots/yt-after.png)
+
+### 📸 Instagram
+No more endless scrolling. Only see what you actually want to see.
+
+**Before** ❌ | **After** ✅
+:---:|:---:
+![Instagram Before](Assets/Screenshots/insta-before.png) | ![Instagram After](Assets/Screenshots/insta-after.png)
 
 ## Installation
 👉 **[Download on Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/no-algorithms/)**
