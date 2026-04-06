@@ -67,6 +67,7 @@ async function buildTarget(target) {
     
     // Copy assets
     await copyDir(path.join(ROOT_DIR, 'sites'), path.join(outDir, 'sites'));
+    await copyDir(path.join(ROOT_DIR, 'icons'), path.join(outDir, 'icons'));
 
     // Process manifest
     const manifestRaw = await fs.readFile(path.join(ROOT_DIR, 'manifest.json'), 'utf-8');
