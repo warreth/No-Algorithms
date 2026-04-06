@@ -1,8 +1,6 @@
 # No Algorithms by WarreTh
 
-> [!NOTE]
 > This is a fork of [No-Algorithms](https://github.com/thejoeman23/No-Algorithms) by thejoeman23. 
-> This fork adds **Firefox** support, automated cross-browser build pipelines, better modularity, and more features.
 
 A browser extension that removes short form content and algorithms from social media websites while keeping the main site intact.
 
