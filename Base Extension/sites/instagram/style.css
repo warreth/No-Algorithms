@@ -1,16 +1,21 @@
-/* Hide generic reels tabs */
-a[href="/reels/"],
-a[href="/reels"],
-a[og_href*="reels"],
-a[href*="reels"],
-a[data-noalg-home-link="1"]
+/* Hide Reels, Explore tabs globally but leave reels loaded inline in feeds working */
+a:has(svg[aria-label="Reels"]),
+a:has(svg[aria-label="Explore"]),
+a:has(svg[aria-label="Zoeken"]),
+a:has(svg[aria-label="Search"]),
+a:has(svg[name="explore"])
 {
     display: none !important;
 }
 
-/* Hide recommendations in feed */
-article[isRecommendation="true"] {
+
+/* Hide recommendations in feed and completely hide their containers to prevent half-post artifacts or infinite loading spinners */
+article[isRecommendation="true"],
+[data-noalg-hide-parent="true"] {
     display: none !important;
+    height: 0 !important;
+    width: 0 !important;
+    overflow: hidden !important;
 }
 
 /* Prevent scrolling to the next video when viewing a single reel from DMs or Explore */

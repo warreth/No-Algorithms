@@ -47,7 +47,7 @@ class App {
 
         this.settings = await settingsResponse.json();
 
-      if (this.settings.blocked_paths && this.settings.blocked_paths.some(bp => bp === "/")) {
+      if (this.settings.blocked_paths && this.settings.blocked_paths.some(bp => bp === "/" || bp === "exact:/")) {
         this.slash_is_blocked = true;
       }
       break; 
@@ -82,7 +82,9 @@ class App {
   private Redirections(): void {
     if (!this.Is_correct_website()) return;
     if (this.ShouldRedirect(location.pathname)) {
-      window.location.replace(this.home_url);
+      if (location.href !== this.home_url && location.pathname + location.search !== this.settings.home_path) {
+        window.location.replace(this.home_url);
+      }
     }
   }
 

@@ -56,17 +56,54 @@ export const instagramRule: SiteRule = {
                         txt === "because you liked" || 
                         txt === "because you follow" ||
                         txt === "voorgesteld voor jou" ||
-                        txt === "voorgesteld bericht"
+                        txt === "voorgesteld" ||
+                        txt === "voorgesteld bericht" ||
+                        txt === "sponsored" ||
+                        txt === "gesponsord" ||
+                        txt === "ad" ||
+                        txt === "advertentie"
                     ) {
                         isRecommendation = true;
                         break;
                     }
                 }
             }
+
+            // Secondary Ad Fallback: Check standard CTA buttons
+            if (!isRecommendation) {
+                const ctas = Array.from(article.querySelectorAll('a, button, [role="button"], span, div'));
+                for (const el of ctas) {
+                    if (el.children.length === 0 && el.textContent) {
+                        const txt = el.textContent.trim().toLowerCase();
+                        if (
+                            txt === "learn more" || 
+                            txt === "meer informatie" || 
+                            txt === "shop now" || 
+                            txt === "nu shoppen" ||
+                            txt === "install now" ||
+                            txt === "downloaden" ||
+                            txt === "sign up" ||
+                            txt === "registreren" ||
+                            txt === "subscribe"
+                        ) {
+                            isRecommendation = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
             if (isRecommendation) {
                 article.setAttribute("isRecommendation", "true");
+                // Only hide the immediate wrapper if it's solely for this article (has 1 or 2 children to account for a possible spacer)
+                if (article.parentElement && article.parentElement.childElementCount <= 2) {
+                    article.parentElement.setAttribute("data-noalg-hide-parent", "true");
+                }
             } else {
                 article.setAttribute("isRecommendation", "false");
+                if (article.parentElement) {
+                    article.parentElement.removeAttribute("data-noalg-hide-parent");
+                }
             }
         });
     }
