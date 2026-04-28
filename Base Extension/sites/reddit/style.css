@@ -1,0 +1,20 @@
+/* Restrict Reddit to post pages only */
+
+/* Hide everything by default on non-comment pages, except top nav so they aren't stuck? 
+Actually, maybe just grey it out or hide main content completely */
+body:not(.noalg-post-page) #main-content,
+body:not(.noalg-post-page) shreddit-feed,
+body:not(.noalg-post-page) .subgrid-container {
+    display: none !important;
+}
+
+/* Also hide sidebars anywhere to avoid rabbit holes */
+reddit-sidebar-nav, 
+#right-sidebar-container,
+[slot="right-sidebar"],
+#left-sidebar-container {
+    display: none !important;
+}
+
+/* Hide comments feed maybe? The prompt only said "opening of direct links to posts" 
+We allow comments. */

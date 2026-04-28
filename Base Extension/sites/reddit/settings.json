@@ -1,0 +1,11 @@
+{
+  "website_name": "reddit",
+  "home_path": "/",
+  "blocked_paths": [],
+  "remove_links_to_path": [
+    "exact:/",
+    "exact:/?feed=home",
+    "/r/popular",
+    "/r/all"
+  ]
+}

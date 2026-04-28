@@ -17,7 +17,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["*://*.youtube.com/*", "*://*.instagram.com/*"],
+      "matches": ["*://*.youtube.com/*", "*://*.instagram.com/*", "*://*.reddit.com/*"],
       "js": ["dist/main.js"],
       "run_at": "document_start"
     },
@@ -29,6 +29,11 @@
     {
       "matches": ["*://*.instagram.com/*"],
       "css": ["sites/instagram/style.css"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["*://*.reddit.com/*"],
+      "css": ["sites/reddit/style.css"],
       "run_at": "document_start"
     }
   ],
