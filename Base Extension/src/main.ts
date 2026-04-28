@@ -11,6 +11,11 @@ class App {
   private home_url!: string;
   private slash_is_blocked: boolean = false;
   private activeRules = getActiveRules(location.hostname);
+  
+  // Timer state
+  private pageStartTime: number = Date.now();
+  private timerEl: HTMLElement | null = null;
+  private timerIntervalId: number | null = null;
 
   constructor() {
     if (document.readyState === "loading") {
@@ -144,6 +149,7 @@ class App {
   // Run redirections on location change
   private RunOnLocationChanged(): void {
     this.Redirections();
+    this.ResetTimer();
   }
 
   // Setup listeners for history and hash changes
@@ -167,6 +173,76 @@ class App {
     window.addEventListener("hashchange", () => this.RunOnLocationChanged());
   }
 
+  // --- Timer Methods ---
+
+  private InitTimer(): void {
+    if (this.timerEl) return;
+
+    this.timerEl = document.createElement("div");
+    this.timerEl.id = "noalg-page-timer";
+    this.timerEl.title = "Time spent on this page";
+    
+    // Unobtrusive but visible styling
+    Object.assign(this.timerEl.style, {
+      position: "fixed",
+      bottom: "15px",
+      left: "15px",
+      zIndex: "2147483647", // Max z-index
+      pointerEvents: "none",
+      backgroundColor: "rgba(0, 0, 0, 0.4)",
+      color: "rgba(255, 255, 255, 0.8)",
+      padding: "4px 8px",
+      borderRadius: "6px",
+      fontFamily: "ui-monospace, SFMono-Regular, Consolas, monospace",
+      fontSize: "12px",
+      fontWeight: "500",
+      backdropFilter: "blur(4px)",
+      transition: "opacity 0.3s ease",
+      opacity: "0.5"
+    });
+
+    document.body.appendChild(this.timerEl);
+    
+    // Start interval
+    if (this.timerIntervalId !== null) {
+      window.clearInterval(this.timerIntervalId);
+    }
+    this.timerIntervalId = window.setInterval(() => this.UpdateTimer(), 1000);
+    this.UpdateTimer();
+  }
+
+  private UpdateTimer(): void {
+    if (!this.timerEl) return;
+    
+    const elapsed = Math.floor((Date.now() - this.pageStartTime) / 1000);
+    const h = Math.floor(elapsed / 3600);
+    const m = Math.floor((elapsed % 3600) / 60);
+    const s = elapsed % 60;
+    
+    let text = "";
+    if (h > 0) {
+        text += `${h}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+    } else {
+        text += `${m}:${s.toString().padStart(2, "0")}`;
+    }
+    
+    this.timerEl.textContent = text;
+
+    // Optional: make it slightly more visible if they've been on the page for a long time (e.g. > 5 mins)
+    if (elapsed > 300) {
+      this.timerEl.style.opacity = "0.8";
+      this.timerEl.style.backgroundColor = "rgba(0, 0, 0, 0.6)";
+    } else {
+      this.timerEl.style.opacity = "0.5";
+      this.timerEl.style.backgroundColor = "rgba(0, 0, 0, 0.4)";
+    }
+  }
+
+  private ResetTimer(): void {
+    this.pageStartTime = Date.now();
+    this.UpdateTimer();
+  }
+
   // Start the app by loading settings and setting up observers
   public async Start(): Promise<void> {
     await this.set_up_settings().catch(err => {
@@ -178,6 +254,7 @@ class App {
       this.Redirections();
     }
 
+    this.InitTimer();
     this.SetupLocationChangeListeners();
     document.addEventListener("click", this.ForceReroutedLinks.bind(this), true);
 
