@@ -218,3 +218,13 @@ ytd-item-section-renderer[target-id="watch-next-feed"] {
 #related {
     display: none !important;
 }
+
+/* Hide comments section completely to maintain focus and avoid rabbit holes */
+ytd-comments,
+#comments,
+.ytd-comments {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    height: 0 !important;
+}
