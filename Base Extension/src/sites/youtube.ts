@@ -13,7 +13,9 @@ export const youtubeRule: SiteRule = {
             if (!existingStyle) {
                 const style = document.createElement("style");
                 style.id = "no-alg-blur-style";
-                style.textContent = "#secondary { filter: blur(10px) }";
+                // Only blur the algorithmic recommendation containers, not the entire sidebar 
+                // so our custom info-card stays sharp and visible
+                style.textContent = "#related, ytd-watch-next-secondary-results-renderer { filter: blur(10px) !important; pointer-events: none !important; }";
                 document.head.appendChild(style);
             }
         } else if (videoEl.hasAttribute("theater") || videoEl.hasAttribute("playlist")) {
