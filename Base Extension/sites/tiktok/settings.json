@@ -1,0 +1,10 @@
+{
+  "website_name": "tiktok",
+  "home_path": "/",
+  "blocked_paths": [],
+  "remove_links_to_path": [
+    "exact:/",
+    "/foryou",
+    "/following"
+  ]
+}
