@@ -1,5 +1,5 @@
 # No Algorithms by WarreTh
-> This is a fork of [No-Algorithms](https://github.com/thejoeman23/No-Algorithms) by thejoeman23. 
+> I got the idea from [No-Algorithms](https://github.com/thejoeman23/No-Algorithms) by thejoeman23. 
 
 A browser extension that removes short form content and algorithms from social media websites while keeping the main site intact.
 
