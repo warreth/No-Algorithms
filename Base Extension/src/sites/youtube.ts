@@ -42,8 +42,22 @@ export const youtubeRule: SiteRule = {
             buttonEl.textContent = "Search";
             buttonEl.id = "info-card-button";
 
+            const sponsorLink = document.createElement("a");
+            sponsorLink.className = "noalg-sponsor-link";
+            sponsorLink.href = "https://github.com/sponsors/WarreTh";
+            sponsorLink.target = "_blank";
+            sponsorLink.rel = "noopener noreferrer";
+            sponsorLink.textContent = "Support No Algorithms";
+            sponsorLink.style.marginTop = "20px";
+            sponsorLink.style.fontSize = "11px";
+            sponsorLink.style.opacity = "0.4";
+            sponsorLink.style.textDecoration = "none";
+            sponsorLink.style.color = "inherit";
+            sponsorLink.onmouseover = () => sponsorLink.style.opacity = "0.8";
+            sponsorLink.onmouseout = () => sponsorLink.style.opacity = "0.4";
+
             sidebarEl.insertBefore(infoEl, sidebarEl.firstChild);
-            infoEl.append(textEl1, textEl2, buttonEl);
+            infoEl.append(textEl1, textEl2, buttonEl, sponsorLink);
 
             buttonEl.addEventListener("click", () => {
                 const searchbox = document.querySelector('[name="search_query"]') as HTMLElement | null;

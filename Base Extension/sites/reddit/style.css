@@ -1,7 +1,6 @@
 /* Restrict Reddit to post pages only */
 
-/* Hide everything by default on non-comment pages, except top nav so they aren't stuck? 
-Actually, maybe just grey it out or hide main content completely */
+/* Hide everything by default on non-comment pages, except top nav so they aren't stuck. */
 body:not(.noalg-post-page) #main-content,
 body:not(.noalg-post-page) shreddit-feed,
 body:not(.noalg-post-page) .subgrid-container {
@@ -16,5 +15,67 @@ reddit-sidebar-nav,
     display: none !important;
 }
 
-/* Hide comments feed maybe? The prompt only said "opening of direct links to posts" 
-We allow comments. */
+/* Hide the search bar across the site */
+shreddit-search-bar,
+#AppRouter-main-content shreddit-search-bar,
+search-dynamic-id-cache-wrapper,
+#search-input {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+}
+
+/* Focus Overview Overlay on non-post pages */
+#noalg-reddit-focus {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: transparent;
+    color: var(--color-neutral-content-strong, #1c1c1c);
+    padding: 60px;
+    z-index: 999999;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+#noalg-reddit-focus h1 {
+    font-size: 32px;
+    margin-bottom: 16px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+#noalg-reddit-focus p {
+    font-size: 18px;
+    opacity: 0.7;
+    max-width: 400px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+}
+body.noalg-post-page #noalg-reddit-focus {
+    display: none !important;
+}
+
+/* Sponsor link styling */
+.noalg-sponsor-link {
+    font-size: 12px;
+    color: inherit;
+    opacity: 0.4;
+    text-decoration: none;
+    margin-top: 32px;
+    transition: opacity 0.2s;
+    font-weight: 500;
+}
+.noalg-sponsor-link:hover {
+    opacity: 0.8 !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    #noalg-reddit-focus {
+        color: #f1f1f1;
+    }
+}
