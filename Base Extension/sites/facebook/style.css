@@ -27,3 +27,8 @@ form[aria-label="Comment"],
 [aria-label*="manus ai" i] {
     display: none !important;
 }
+
+/* Hide algo posts identified by JS */
+.noalgo-hidden {
+    display: none !important;
+}
