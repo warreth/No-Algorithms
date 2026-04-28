@@ -3,12 +3,14 @@ import { youtubeRule } from "./youtube";
 import { instagramRule } from "./instagram";
 import { redditRule } from "./reddit";
 import { tiktokRule } from "./tiktok";
+import { facebookRule } from "./facebook";
 
 export const siteRules: SiteRule[] = [
     youtubeRule,
     instagramRule,
     redditRule,
-    tiktokRule
+    tiktokRule,
+    facebookRule
 ];
 
 export function getActiveRules(hostname: string): SiteRule[] {

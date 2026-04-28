@@ -1,0 +1,29 @@
+/* Hide reels/watch/gaming tabs in top nav / sidebars */
+a[href*="/reels/"],
+a[href*="/reel/"],
+a[href*="/watch/"],
+a[href*="/gaming/"],
+[aria-label="Reels"],
+[aria-label="Gaming"],
+[aria-label="Watch"],
+[aria-label*="Reels"] {
+    display: none !important;
+}
+
+/* Hide Meta AI */
+div[aria-label*="Meta AI"] {
+    display: none !important;
+}
+
+/* Hide comment UI */
+div[aria-label="Leave a comment"],
+div[aria-label*="Comment"],
+form[aria-label="Comment"],
+[aria-label="Write a comment"] {
+    display: none !important;
+}
+
+/* Hide manus ai */
+[aria-label*="manus ai" i] {
+    display: none !important;
+}

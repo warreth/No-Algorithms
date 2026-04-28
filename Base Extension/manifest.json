@@ -17,7 +17,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["*://*.youtube.com/*", "*://*.instagram.com/*", "*://*.reddit.com/*", "*://*.tiktok.com/*"],
+      "matches": ["*://*.youtube.com/*", "*://*.instagram.com/*", "*://*.reddit.com/*", "*://*.tiktok.com/*", "*://*.facebook.com/*"],
       "js": ["dist/main.js"],
       "run_at": "document_start"
     },
@@ -39,6 +39,11 @@
     {
       "matches": ["*://*.tiktok.com/*"],
       "css": ["sites/tiktok/style.css"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["*://*.facebook.com/*"],
+      "css": ["sites/facebook/style.css"],
       "run_at": "document_start"
     }
   ],

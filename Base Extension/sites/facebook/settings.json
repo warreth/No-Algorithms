@@ -1,0 +1,16 @@
+{
+  "website_name": "facebook",
+  "home_path": "/",
+  "blocked_paths": [
+    "/gaming",
+    "/reels",
+    "/reel",
+    "/watch"
+  ],
+  "remove_links_to_path": [
+    "/gaming",
+    "/reels",
+    "/reel",
+    "/watch"
+  ]
+}
