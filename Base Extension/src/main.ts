@@ -18,6 +18,14 @@ class App {
   private timerIntervalId: number | null = null;
 
   constructor() {
+    const savedTime = sessionStorage.getItem("noalg_timer_start");
+    if (savedTime) {
+      this.pageStartTime = parseInt(savedTime, 10);
+    } else {
+      this.pageStartTime = Date.now();
+      sessionStorage.setItem("noalg_timer_start", this.pageStartTime.toString());
+    }
+
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", () => this.Start(), { once: true });
     } else {
@@ -149,7 +157,6 @@ class App {
   // Run redirections on location change
   private RunOnLocationChanged(): void {
     this.Redirections();
-    this.ResetTimer();
   }
 
   // Setup listeners for history and hash changes
@@ -197,7 +204,8 @@ class App {
       fontSize: "12px",
       fontWeight: "500",
       backdropFilter: "blur(4px)",
-      transition: "opacity 0.3s ease",
+      transition: "opacity 0.3s ease, transform 0.5s ease",
+      transformOrigin: "bottom left",
       opacity: "0.5"
     });
 
@@ -236,10 +244,16 @@ class App {
       this.timerEl.style.opacity = "0.5";
       this.timerEl.style.backgroundColor = "rgba(0, 0, 0, 0.4)";
     }
+    
+    // Grow timer in size every 3 minutes (180 seconds)
+    const minutesScale = Math.floor(elapsed / 180);
+    const scale = 1 + (0.2 * minutesScale);
+    this.timerEl.style.transform = `scale(${scale})`;
   }
 
   private ResetTimer(): void {
     this.pageStartTime = Date.now();
+    sessionStorage.setItem("noalg_timer_start", this.pageStartTime.toString());
     this.UpdateTimer();
   }
 
