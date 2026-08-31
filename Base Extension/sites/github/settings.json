@@ -1,0 +1,15 @@
+{
+  "website_name": "github",
+  "home_path": "/",
+  "blocked_paths": [],
+  "remove_links_to_path": [
+    "/trending",
+    "/topics",
+    "/collections",
+    "/events",
+    "exact:/sponsors/explore",
+    "exact:/explore",
+    "exact:/feed",
+    "exact:/dashboard-feed"
+  ]
+}

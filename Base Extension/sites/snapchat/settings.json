@@ -1,0 +1,16 @@
+{
+  "website_name": "snapchat",
+  "home_path": "/web",
+  "blocked_paths": [
+    "/spotlight",
+    "/discover",
+    "/explore",
+    "/lens"
+  ],
+  "remove_links_to_path": [
+    "/spotlight",
+    "/discover",
+    "/explore",
+    "/lens"
+  ]
+}

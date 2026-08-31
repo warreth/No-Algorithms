@@ -1,0 +1,26 @@
+/* No Algorithms — Snapchat
+   Chat/DMs on web.snapchat.com stay fully usable; the Stories/Spotlight
+   rail and buttons are removed. Consumer feed pages get the overlay. */
+
+/* Landing right rail: Stories / Spotlight / Games buttons (web app) */
+div.tCfts,
+div[title="View stories"],
+div[title="View Spotlight Stories"],
+div[title="Games"],
+[class*="WGPER"],
+[title="Open Spotlight"],
+
+/* Story surfaces outside the conversation list (JS also removes these) */
+[class*="OwWqx"],
+[aria-label*="Stories" i],
+
+/* Consumer app frame once the overlay is up (html.noalg-snap-blocked) */
+html.noalg-snap-blocked #app,
+html.noalg-snap-blocked #main-content,
+html.noalg-snap-blocked [data-testid="page-frame"],
+html.noalg-snap-blocked [data-testid="desktop-content-wrapper"],
+html.noalg-snap-blocked [data-testid="spotlightFooterDesktop"]
+
+{
+    display: none !important;
+}

@@ -17,7 +17,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["*://*.youtube.com/*", "*://*.instagram.com/*", "*://*.reddit.com/*", "*://*.tiktok.com/*", "*://*.facebook.com/*"],
+      "matches": ["*://*.youtube.com/*", "*://*.instagram.com/*", "*://*.reddit.com/*", "*://*.tiktok.com/*", "*://*.facebook.com/*", "*://*.github.com/*", "*://*.snapchat.com/*"],
       "js": ["dist/main.js"],
       "run_at": "document_start"
     },
@@ -44,6 +44,16 @@
     {
       "matches": ["*://*.facebook.com/*"],
       "css": ["sites/facebook/style.css"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["*://*.github.com/*"],
+      "css": ["sites/github/style.css"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["*://*.snapchat.com/*"],
+      "css": ["sites/snapchat/style.css"],
       "run_at": "document_start"
     }
   ],

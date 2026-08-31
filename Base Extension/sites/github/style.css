@@ -1,0 +1,23 @@
+/* No Algorithms — GitHub
+   Discovery surfaces (trending/explore/topics/collections/events) and the
+   ranked home feed are removed; repos, issues, PRs, search stay intact. */
+
+/* For-you feed on the logged-in home page */
+feed-container,
+.js-feed-container,
+[data-target="feed-container.content"],
+.home-feed .feed-main,
+.js-include-fragment[src*="for_you_feed"],
+
+/* Right-rail recommendations on home */
+.feed-sidebar,
+
+/* Explore nav links and any card linking into blocked routes */
+a.noalg-hidden,
+
+/* Repo Pulse content (page shell kept for navigation) */
+.noalg-pulse-body
+
+{
+    display: none !important;
+}
