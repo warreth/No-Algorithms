@@ -2,7 +2,7 @@
   "name": "No Algorithms",
   "author": "WarreTh",
   "manifest_version": 3,
-  "version": "1.0.0",
+  "version": "1.2.0",
   "browser_specific_settings": {
     "gecko": {
       "id": "no-algorithms@example.com"
@@ -17,48 +17,137 @@
   },
   "content_scripts": [
     {
-      "matches": ["*://*.youtube.com/*", "*://*.instagram.com/*", "*://*.reddit.com/*", "*://*.tiktok.com/*", "*://*.facebook.com/*", "*://*.github.com/*", "*://*.snapchat.com/*"],
-      "js": ["dist/main.js"],
+      "matches": [
+        "*://*.youtube.com/*",
+        "*://*.instagram.com/*",
+        "*://*.reddit.com/*",
+        "*://*.tiktok.com/*",
+        "*://*.facebook.com/*",
+        "*://*.github.com/*",
+        "*://*.snapchat.com/*",
+        "*://*.x.com/*",
+        "*://*.twitter.com/*",
+        "*://*.threads.net/*",
+        "*://*.pinterest.com/*",
+        "*://*.twitch.tv/*",
+        "*://*.threads.com/*"
+      ],
+      "js": [
+        "dist/main.js"
+      ],
       "run_at": "document_start"
     },
     {
-      "matches": ["*://*.youtube.com/*"],
-      "css": ["sites/youtube/style.css"],
+      "matches": [
+        "*://*.youtube.com/*"
+      ],
+      "css": [
+        "sites/youtube/style.css"
+      ],
       "run_at": "document_start"
     },
     {
-      "matches": ["*://*.instagram.com/*"],
-      "css": ["sites/instagram/style.css"],
+      "matches": [
+        "*://*.instagram.com/*"
+      ],
+      "css": [
+        "sites/instagram/style.css"
+      ],
       "run_at": "document_start"
     },
     {
-      "matches": ["*://*.reddit.com/*"],
-      "css": ["sites/reddit/style.css"],
+      "matches": [
+        "*://*.reddit.com/*"
+      ],
+      "css": [
+        "sites/reddit/style.css"
+      ],
       "run_at": "document_start"
     },
     {
-      "matches": ["*://*.tiktok.com/*"],
-      "css": ["sites/tiktok/style.css"],
+      "matches": [
+        "*://*.tiktok.com/*"
+      ],
+      "css": [
+        "sites/tiktok/style.css"
+      ],
       "run_at": "document_start"
     },
     {
-      "matches": ["*://*.facebook.com/*"],
-      "css": ["sites/facebook/style.css"],
+      "matches": [
+        "*://*.facebook.com/*"
+      ],
+      "css": [
+        "sites/facebook/style.css"
+      ],
       "run_at": "document_start"
     },
     {
-      "matches": ["*://*.github.com/*"],
-      "css": ["sites/github/style.css"],
+      "matches": [
+        "*://*.github.com/*"
+      ],
+      "css": [
+        "sites/github/style.css"
+      ],
       "run_at": "document_start"
     },
     {
-      "matches": ["*://*.snapchat.com/*"],
-      "css": ["sites/snapchat/style.css"],
+      "matches": [
+        "*://*.snapchat.com/*"
+      ],
+      "css": [
+        "sites/snapchat/style.css"
+      ],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "*://*.x.com/*",
+        "*://*.twitter.com/*"
+      ],
+      "css": [
+        "sites/x/style.css"
+      ],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "*://*.threads.net/*",
+        "*://*.threads.com/*"
+      ],
+      "css": [
+        "sites/threads/style.css"
+      ],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "*://*.pinterest.com/*"
+      ],
+      "css": [
+        "sites/pinterest/style.css"
+      ],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "*://*.twitch.tv/*"
+      ],
+      "css": [
+        "sites/twitch/style.css"
+      ],
       "run_at": "document_start"
     }
   ],
-  "web_accessible_resources": [{
-    "resources": ["sites/*", "sites/**/*"],
-    "matches": ["<all_urls>"]
-  }]
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "sites/*",
+        "sites/**/*"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
 }

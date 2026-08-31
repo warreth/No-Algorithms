@@ -7,13 +7,17 @@ A browser extension that removes short form content and algorithms from social m
 
 | Site | What gets removed | What stays usable |
 | --- | --- | --- |
-| **YouTube** | Home feed (redirects to Subscriptions), Shorts everywhere, comments, recommendation sidebar (replaced by a "What next? YOU decide." card) | Subscriptions, search, watch pages, channels |
+| **YouTube** | Home feed (redirects to Subscriptions), Shorts everywhere, comments, recommendation sidebar (replaced by a "What next? YOU decide." card), Trending/Music/Gaming/Sports/News feeds and guide entries | Subscriptions, search, watch pages, channels |
 | **Instagram** | Reels tab and permalinks, Explore, suggested posts, ads, collab spam in the feed, Reels sub-tab on profiles | Followed feed, stories, DMs, profiles, search |
 | **Reddit** | Home feed (focus overlay), /r/popular, /r/all, sidebars, search bar, old/new/sh redirect | Post pages, subreddits |
 | **TikTok** | The whole For You feed (focus overlay) | — |
 | **Facebook** | Home feed (focus overlay), Reels, Watch, Gaming, Meta AI, comment boxes, suggested posts | Profiles, groups |
 | **GitHub** | Trending, Explore, Topics, Collections, Events, Sponsors explore, home "For you" feed, repo Pulse | Repos, issues, PRs, notifications, search |
 | **Snapchat** | Stories & Spotlight buttons on the landing rail, per-chat Spotlight button, story thumbnails, consumer /spotlight /discover /explore /lens pages | Chat/DMs, calls |
+| **X (Twitter)** | For You ranked feed, Explore/Trending, "Who to follow" and "What's happening" sidebars, topic suggestions | Following timeline, posts, profiles, search, lists |
+| **Threads** | The entire ranked "For you" home feed (focus overlay), Explore | @profiles, post permalinks |
+| **Pinterest** | Ranked "more ideas" home feed, Today articles, Ideas pages, video feed | Pins, boards, profiles, search, following |
+| **Twitch** | Ranked browse feed (home + /directory shelves), downloads, Prime offers, recommended-channel rails | /directory/following, channel pages, search, clips |
 
 ## Screenshots
 
