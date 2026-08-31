@@ -1,4 +1,4 @@
-import { SiteRule } from "../core/types";
+import type { SiteRule } from "../core/types.ts";
 
 /** YouTube: subscriptions-only browsing. */
 export const youtubeRule: SiteRule = {

@@ -1,5 +1,5 @@
-import { SiteRule } from "../core/types";
-import { mountFocusOverlay } from "../core/overlay";
+import type { SiteRule } from "../core/types.ts";
+import { mountFocusOverlay } from "../core/overlay.ts";
 
 /**
  * GitHub: keep code, issues, PRs, notifications and search; remove the

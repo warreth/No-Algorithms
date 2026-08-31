@@ -13,6 +13,9 @@
   "scripts": {
     "build": "esbuild src/main.ts --bundle --outfile=dist/main.js --target=chrome89 --format=iife",
     "build:all": "node scripts/build.mjs",
+    "typecheck": "node node_modules/typescript/bin/tsc --noEmit",
+    "test": "npm run build && npm run typecheck && node --experimental-strip-types tests/paths.test.mts && node tests/engine.test.mjs && node tests/dom.test.mjs",
+    "test:e2e": "node tests/e2e.test.mjs",
     "pack": "node scripts/pack.mjs",
     "watch": "nodemon --watch src --watch sites --ext ts,css,json --exec \"npm run build:all\"",
     "lint": "web-ext lint -s build/firefox",

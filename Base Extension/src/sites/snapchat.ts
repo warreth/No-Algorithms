@@ -1,5 +1,5 @@
-import { SiteRule } from "../core/types";
-import { mountFocusOverlay } from "../core/overlay";
+import type { SiteRule } from "../core/types.ts";
+import { mountFocusOverlay } from "../core/overlay.ts";
 
 /**
  * Snapchat: keep chat/DMs working on web.snapchat.com; remove the

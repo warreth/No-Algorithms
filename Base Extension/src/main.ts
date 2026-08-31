@@ -2,9 +2,9 @@
 // No Algorithms — content-script bootstrap.
 // Engine, timer and site rules are wired here and nothing else.
 // ============================================================
-import { Engine } from "./core/engine";
-import { getActiveRules } from "./core/registry";
-import { PageTimer } from "./core/timer";
+import { Engine } from "./core/engine.ts";
+import { getActiveRules } from "./core/registry.ts";
+import { PageTimer } from "./core/timer.ts";
 
 const boot = () => {
   new Engine(location, getActiveRules(location.hostname)).start();

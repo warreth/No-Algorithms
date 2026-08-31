@@ -1,4 +1,4 @@
-import { Settings } from "./types";
+import type { Settings } from "./types.ts";
 
 /**
  * Blocked-path rule semantics:
@@ -47,7 +47,7 @@ export function compilePathRules(settings: Settings): CompiledPathRules {
   const blocked = compile(settings.blocked_paths);
   const removeLinks = compile(settings.remove_links_to_path);
   return {
-    rootBlocked: blocked.rootBlocked,
+    rootBlocked: blocked.rootBlocked || removeLinks.rootBlocked,
     blocked: blocked.re,
     removeLinks: removeLinks.re
   };

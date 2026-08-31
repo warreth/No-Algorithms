@@ -1,5 +1,5 @@
-import { Settings, SiteRule } from "./types";
-import { CompiledPathRules, compilePathRules, isPathBlocked, shouldRewriteLink } from "./paths";
+import type { Settings, SiteRule } from "./types.ts";
+import { CompiledPathRules, compilePathRules, isPathBlocked, shouldRewriteLink } from "./paths.ts";
 
 /**
  * Site engine: loads one site's settings, watches the SPA route, and

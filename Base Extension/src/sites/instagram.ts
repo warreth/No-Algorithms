@@ -1,4 +1,4 @@
-import { SiteRule } from "../core/types";
+import type { SiteRule } from "../core/types.ts";
 
 /**
  * Instagram: keep the followed feed, DMs, stories, profiles and SEARCH;
@@ -89,19 +89,25 @@ function hideArticle(article: Element): void {
   }
 }
 
-/** Settle window per article; verdicts latch so settled posts are skipped. */
+/** Settle window per article; verdicts latch so settled posts are skipped.
+ *  A pending article re-arms its own timeout — the settle clock doesn't
+ *  depend on some other DOM mutation happening to schedule a re-scan. */
 function scanArticles(): void {
   if (location.pathname.startsWith("/direct/")) return;
 
   document.querySelectorAll("article").forEach(article => {
     if (article.hasAttribute(VERDICT_ATTR)) return; // already judged — latch
 
-    if (!bylineReady(article) && !article.hasAttribute(PENDING_ATTR)) {
+    const ready = bylineReady(article);
+    if (!ready && !article.hasAttribute(PENDING_ATTR)) {
       article.setAttribute(PENDING_ATTR, String(Date.now()));
     }
     if (article.hasAttribute(PENDING_ATTR)) {
       const age = Date.now() - parseInt(article.getAttribute(PENDING_ATTR)!, 10);
-      if (age < SETTLE_MS && !bylineReady(article)) return; // still settling
+      if (!ready && age < SETTLE_MS) {
+        setTimeout(() => scanArticles(), SETTLE_MS - age + 10);
+        return; // still settling — retry when the window elapses
+      }
     }
 
     const blocked = isRecommendation(article);

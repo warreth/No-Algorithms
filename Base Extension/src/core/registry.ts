@@ -1,11 +1,11 @@
-import { SiteRule } from "./types";
-import { youtubeRule } from "../sites/youtube";
-import { instagramRule } from "../sites/instagram";
-import { redditRule } from "../sites/reddit";
-import { tiktokRule } from "../sites/tiktok";
-import { facebookRule } from "../sites/facebook";
-import { githubRule } from "../sites/github";
-import { snapchatRule } from "../sites/snapchat";
+import type { SiteRule } from "./types.ts";
+import { youtubeRule } from "../sites/youtube.ts";
+import { instagramRule } from "../sites/instagram.ts";
+import { redditRule } from "../sites/reddit.ts";
+import { tiktokRule } from "../sites/tiktok.ts";
+import { facebookRule } from "../sites/facebook.ts";
+import { githubRule } from "../sites/github.ts";
+import { snapchatRule } from "../sites/snapchat.ts";
 
 const siteRules: SiteRule[] = [
     youtubeRule,

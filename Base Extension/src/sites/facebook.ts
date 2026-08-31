@@ -1,5 +1,5 @@
-import { SiteRule } from "../core/types";
-import { createFocusOverlay } from "../core/overlay";
+import type { SiteRule } from "../core/types.ts";
+import { createFocusOverlay } from "../core/overlay.ts";
 
 const OVERLAY_ID = "noalgo-fb-overlay";
 
