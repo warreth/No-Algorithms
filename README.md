@@ -3,8 +3,19 @@
 
 A browser extension that removes short form content and algorithms from social media websites while keeping the main site intact.
 
+## Supported sites
 
-## Features
+| Site | What gets removed | What stays usable |
+| --- | --- | --- |
+| **YouTube** | Home feed (redirects to Subscriptions), Shorts everywhere, comments, recommendation sidebar (replaced by a "What next? YOU decide." card) | Subscriptions, search, watch pages, channels |
+| **Instagram** | Reels tab and permalinks, Explore, suggested posts, ads, collab spam in the feed, Reels sub-tab on profiles | Followed feed, stories, DMs, profiles, search |
+| **Reddit** | Home feed (focus overlay), /r/popular, /r/all, sidebars, search bar, old/new/sh redirect | Post pages, subreddits |
+| **TikTok** | The whole For You feed (focus overlay) | — |
+| **Facebook** | Home feed (focus overlay), Reels, Watch, Gaming, Meta AI, comment boxes, suggested posts | Profiles, groups |
+| **GitHub** | Trending, Explore, Topics, Collections, Events, Sponsors explore, home "For you" feed, repo Pulse | Repos, issues, PRs, notifications, search |
+| **Snapchat** | Stories & Spotlight buttons on the landing rail, per-chat Spotlight button, story thumbnails, consumer /spotlight /discover /explore /lens pages | Chat/DMs, calls |
+
+## Screenshots
 
 ### 📺 YouTube
 Take back your focus by removing the algorithmic home feed and shorts.
@@ -33,6 +44,24 @@ No more endless scrolling. Only see what you actually want to see.
 >   <br>
 > - **Mozilla Firefox:** Download the `firefox-extension-[VERSION].xpi` file and drag it directly into your Firefox window to install it.
 
+
+## Development
+
+```bash
+cd "Base Extension"
+npm install
+npm test          # build + typecheck + unit/DOM test suites
+npm run test:e2e  # loads the built extension into real Chromium (needs build:all)
+npm run build:all # build chrome + firefox into build/
+npm run lint      # web-ext lint on the firefox build
+```
+
+The content script lives in `src/`: `src/core/` holds the engine (settings,
+route watching, redirects, link rewriting), the shared focus overlay and the
+page timer; `src/sites/` holds one module per site. Per-site static CSS and
+settings live in `sites/<site>/`; `sites/shared/overlay.css` is the single
+source of truth for the overlay design and is inlined into every site bundle
+by the build.
 
 ## Privacy Policy
 This extension runs completely locally and does not collect any user data. See the full [Privacy Policy](PRIVACY.md) for details.
