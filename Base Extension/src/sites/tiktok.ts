@@ -1,16 +1,10 @@
-import { SiteRule } from "./types";
-import { createFocusOverlay } from "./utils";
+import { SiteRule } from "../core/types";
+import { mountFocusOverlay } from "../core/overlay";
 
+const OVERLAY_ID = "noalg-tiktok-focus";
+
+/** TikTok: entirely algorithmic; the whole app is replaced by the overlay. */
 export const tiktokRule: SiteRule = {
-    domain: "tiktok.com",
-    onInit: () => {
-        // No specific init for tiktok currently
-    },
-    onMutation: () => {
-        // Disable the whole site and show an overlay
-        const overlay = createFocusOverlay("noalg-tiktok-focus");
-        if (overlay) {
-            document.body.appendChild(overlay);
-        }
-    }
+  domain: "tiktok.com",
+  onMutation: () => mountFocusOverlay(OVERLAY_ID)
 };

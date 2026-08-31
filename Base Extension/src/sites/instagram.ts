@@ -1,110 +1,150 @@
-import { SiteRule } from "./types";
+import { SiteRule } from "../core/types";
 
-if (!(window as any).__noAlgInstaListenerAdded) {
-    (window as any).__noAlgInstaListenerAdded = true;
-    window.addEventListener("keydown", (e) => {
-        if (
-            document.body.classList.contains("noalg-reel-view") &&
-            (e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === "ArrowUp")
-        ) {
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
-        }
-    }, true);
+/**
+ * Instagram: keep the followed feed, DMs, stories, profiles and SEARCH;
+ * remove Reels, Explore and every recommendation/ad unit in the feed.
+ *
+ * Detection is a denylist over robust, language-independent markers
+ * (Follow CTA / Suggested label / Sponsored / Paid partnership / Ad /
+ * collab byline). Verdicts latch per article so a settled post is never
+ * rescanned, and markers are only trusted once the byline has rendered.
+ */
+
+const HIDE_ATTR = "data-noalg-hide";
+const VERDICT_ATTR = "data-noalg-verdict";
+const PENDING_ATTR = "data-noalg-pending";
+
+const SUGGESTED_RE = /suggested (for you|posts?)/i;
+const SPONSORED_RE = /^sponsored$/i;
+const PAID_RE = /^paid partnership/i;
+const AD_RE = /^Ad$/;
+const FOLLOW_RE = /^(Follow|Follow Back|Follow back)$/;
+const FOLLOWING_RE = /^(Following|Requested)$/;
+const CTAS_RE = /^(learn more|shop now|install now|download|sign up|subscribe now|see more)$/i;
+
+/** Time (ms) a new article must age before its verdict is trusted. */
+const SETTLE_MS = 400;
+
+/** Hard ceiling so a post whose markers never render still gets judged. */
+const MAX_SETTLE_MS = 3000;
+
+const REEL_VIEW_CLASS = "noalg-reel-view";
+
+function articleText(article: Element): string {
+  return (article.textContent || "").slice(0, 400);
+}
+
+function isSuggested(article: Element): boolean {
+  return SUGGESTED_RE.test(articleText(article));
+}
+
+function isSponsored(article: Element): boolean {
+  const els = article.querySelectorAll("span, div, a, [aria-label]");
+  for (const el of els) {
+    const t = (el.textContent || "").trim();
+    if (t.length <= 4 && AD_RE.test(t)) return true;
+    if (t.length <= 20 && SPONSORED_RE.test(t)) return true;
+    if (t.length <= 40 && PAID_RE.test(t)) return true;
+    const al = el.getAttribute("aria-label") || "";
+    if (SPONSORED_RE.test(al) || PAID_RE.test(al)) return true;
+    if (t.length <= 20 && CTAS_RE.test(t)) return true;
+  }
+  return false;
+}
+
+/** "Follow" CTA is rendered only for accounts you do NOT follow. */
+function hasFollowCta(article: Element): boolean {
+  for (const el of article.querySelectorAll("button, [role='button'], div, span, a")) {
+    const t = (el.textContent || "").trim();
+    if (t && t.length <= 12 && FOLLOW_RE.test(t) && !FOLLOWING_RE.test(t)) return true;
+  }
+  return false;
+}
+
+/** Collab posts ("alice and bob•2h") arrive unlabelled as recommendations;
+ *  handles never contain spaces, so " and " before the byline bullet is one. */
+function isCollab(article: Element): boolean {
+  const txt = article.textContent || "";
+  const dot = txt.indexOf("•");
+  if (dot === -1 || dot > 120) return false;
+  return /\sand\s/i.test(txt.slice(0, dot));
+}
+
+/** Byline marker: the <time> renders after the byline, so its presence
+ *  means detection markers can be trusted. */
+function bylineReady(article: Element): boolean {
+  return article.querySelector("time") !== null;
+}
+
+function isRecommendation(article: Element): boolean {
+  return isSuggested(article) || isSponsored(article) || hasFollowCta(article) || isCollab(article);
+}
+
+/** Hide the smallest wrapper that is solely for this article (parent with
+ *  1–2 children) to avoid half-post artifacts and infinite spinners. */
+function hideArticle(article: Element): void {
+  article.setAttribute(HIDE_ATTR, "true");
+  if (article.parentElement && article.parentElement.childElementCount <= 2) {
+    article.parentElement.setAttribute(HIDE_ATTR, "true");
+  }
+}
+
+/** Settle window per article; verdicts latch so settled posts are skipped. */
+function scanArticles(): void {
+  if (location.pathname.startsWith("/direct/")) return;
+
+  document.querySelectorAll("article").forEach(article => {
+    if (article.hasAttribute(VERDICT_ATTR)) return; // already judged — latch
+
+    if (!bylineReady(article) && !article.hasAttribute(PENDING_ATTR)) {
+      article.setAttribute(PENDING_ATTR, String(Date.now()));
+    }
+    if (article.hasAttribute(PENDING_ATTR)) {
+      const age = Date.now() - parseInt(article.getAttribute(PENDING_ATTR)!, 10);
+      if (age < SETTLE_MS && !bylineReady(article)) return; // still settling
+    }
+
+    const blocked = isRecommendation(article);
+    article.setAttribute(VERDICT_ATTR, blocked ? "blocked" : "kept");
+    if (blocked) hideArticle(article);
+  });
+}
+
+/** Reel permalinks (shared into DMs) must not become a scrollable feed. */
+function updateReelView(pathname: string): void {
+  const isReel = /^\/reels?\//.test(pathname) || pathname.includes("/reel/");
+  document.body.classList.toggle(REEL_VIEW_CLASS, isReel);
+}
+
+/** Hide the Reels sub-tab on profile pages. */
+function hideProfileReelsTab(): void {
+  document.querySelectorAll('a[href$="/reels/"]').forEach(link => {
+    if (link.closest("main")) link.classList.add("noalg-hidden");
+  });
 }
 
 export const instagramRule: SiteRule = {
-    domain: "instagram.com",
-    onMutation: () => {
-        // Intercept single reel viewer (from DMs or Explore) to prevent scrolling
-        if (location.pathname.includes("/reel/") || location.pathname.includes("/reels/")) {
-            document.body.classList.add("noalg-reel-view");
-        } else {
-            document.body.classList.remove("noalg-reel-view");
+  domain: "instagram.com",
+  onInit: () => {
+    // Block arrow-key scrolling in the single-reel viewer (opened from DMs).
+    window.addEventListener(
+      "keydown",
+      (e) => {
+        if (
+          document.body.classList.contains(REEL_VIEW_CLASS) &&
+          ["ArrowRight", "ArrowDown", "ArrowUp"].includes(e.key)
+        ) {
+          e.preventDefault();
+          e.stopPropagation();
         }
-
-        if (location.pathname.includes("/direct/") || document.body.classList.contains("noalg-reel-view")) return;
-
-        // Tag recommendations dynamically when they appear in feed
-        document.querySelectorAll("article").forEach(article => {
-            if (article.getAttribute("isRecommendation")) return;
-
-            // Only look in the header to avoid catching text in captions
-            const header = article.querySelector("header") || article;
-
-            // Better universal detection: Suggested posts and Ads have a "Close" (X) button in their header
-            // Normal posts from followed accounts only have the "More options" (...) button.
-            const hasCloseButton = header.querySelector(
-                'svg[aria-label="Close"], svg[aria-label="Hide"], svg[aria-label="Sluiten"], svg[aria-label="Verbergen"]'
-            );
-            if (hasCloseButton) {
-                article.setAttribute("isRecommendation", "true");
-                return;
-            }
-
-            // Fallback: Check text for known English markers
-            const elements = Array.from(header.querySelectorAll("span, div"));
-            let isRecommendation = false;
-            for (const el of elements) {
-                // Ignore elements that have nested elements
-                if (el.children.length === 0 && el.textContent) {
-                    const txt = el.textContent.trim().toLowerCase();
-                    if (
-                        txt === "suggested for you" || 
-                        txt === "suggested post" || 
-                        txt === "because you liked" || 
-                        txt === "because you follow" ||
-                        txt === "voorgesteld voor jou" ||
-                        txt === "voorgesteld" ||
-                        txt === "voorgesteld bericht" ||
-                        txt === "sponsored" ||
-                        txt === "gesponsord" ||
-                        txt === "ad" ||
-                        txt === "advertentie"
-                    ) {
-                        isRecommendation = true;
-                        break;
-                    }
-                }
-            }
-
-            // Secondary Ad Fallback: Check standard CTA buttons
-            if (!isRecommendation) {
-                const ctas = Array.from(article.querySelectorAll('a, button, [role="button"], span, div'));
-                for (const el of ctas) {
-                    if (el.children.length === 0 && el.textContent) {
-                        const txt = el.textContent.trim().toLowerCase();
-                        if (
-                            txt === "learn more" || 
-                            txt === "meer informatie" || 
-                            txt === "shop now" || 
-                            txt === "nu shoppen" ||
-                            txt === "install now" ||
-                            txt === "downloaden" ||
-                            txt === "sign up" ||
-                            txt === "registreren" ||
-                            txt === "subscribe"
-                        ) {
-                            isRecommendation = true;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if (isRecommendation) {
-                article.setAttribute("isRecommendation", "true");
-                // Only hide the immediate wrapper if it's solely for this article (has 1 or 2 children to account for a possible spacer)
-                if (article.parentElement && article.parentElement.childElementCount <= 2) {
-                    article.parentElement.setAttribute("data-noalg-hide-parent", "true");
-                }
-            } else {
-                article.setAttribute("isRecommendation", "false");
-                if (article.parentElement) {
-                    article.parentElement.removeAttribute("data-noalg-hide-parent");
-                }
-            }
-        });
-    }
+      },
+      true
+    );
+  },
+  onRouteChange: (pathname) => updateReelView(pathname),
+  onMutation: () => {
+    updateReelView(location.pathname);
+    scanArticles();
+    hideProfileReelsTab();
+  }
 };

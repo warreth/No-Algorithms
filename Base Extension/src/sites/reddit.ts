@@ -1,26 +1,25 @@
-import { SiteRule } from "./types";
-import { createFocusOverlay } from "./utils";
+import { SiteRule } from "../core/types";
+import { mountFocusOverlay } from "../core/overlay";
 
+const OVERLAY_ID = "noalg-reddit-focus";
+
+/** Reddit: post pages only; the home feed is replaced by the focus overlay. */
 export const redditRule: SiteRule = {
-    domain: "reddit.com",
-    onInit: () => {
-        if (location.hostname === "old.reddit.com" || location.hostname === "new.reddit.com" || location.hostname === "sh.reddit.com") {
-            location.hostname = "www.reddit.com";
-        }
-    },
-    onMutation: () => {
-        // Only enable opening of direct links to posts
-        const isPostPage = location.pathname.includes("/comments/");
-        
-        if (isPostPage) {
-            document.body.classList.add("noalg-post-page");
-        } else {
-            document.body.classList.remove("noalg-post-page");
-
-            const overlay = createFocusOverlay("noalg-reddit-focus");
-            if (overlay) {
-                document.body.appendChild(overlay);
-            }
-        }
+  domain: "reddit.com",
+  onInit: () => {
+    // Force the modern shell; old/new/sh variants lack our DOM anchors.
+    if (["old.reddit.com", "new.reddit.com", "sh.reddit.com"].includes(location.hostname)) {
+      location.hostname = "www.reddit.com";
     }
+  },
+  onRouteChange: (pathname) => {
+    if (!pathname.includes("/comments/")) return;
+    document.body.classList.remove("noalg-post-page");
+    document.getElementById(OVERLAY_ID)?.remove();
+  },
+  onMutation: () => {
+    const isPostPage = location.pathname.includes("/comments/");
+    document.body.classList.toggle("noalg-post-page", isPostPage);
+    if (!isPostPage) mountFocusOverlay(OVERLAY_ID);
+  }
 };
