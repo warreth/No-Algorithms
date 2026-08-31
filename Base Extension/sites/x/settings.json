@@ -1,0 +1,9 @@
+{
+  "website_name": "x",
+  "home_path": "/",
+  "blocked_paths": [],
+  "remove_links_to_path": [
+    "exact:/explore",
+    "/i/trending"
+  ]
+}

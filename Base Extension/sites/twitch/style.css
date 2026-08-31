@@ -1,0 +1,24 @@
+/* No Algorithms — Twitch
+   Keep: channels you follow (redirect target /directory/following),
+   channel pages, search, clips, videos. Remove: the ranked browse feed
+   (home + /directory shelves), downloads, Prime Gaming offers.
+   Shared overlay tokens are inlined by the build. */
+
+/* Followed-channels sidebar is a deliberate list — keep it. The
+   "recommended" shelf rails on browse pages are gone because those pages
+   redirect. Kill leftover recommendation slots everywhere: */
+[data-a-target="side-nav-featured"],
+[data-a-target="prime-offers-icon"],
+[data-a-target="browse-banner-ad-slot"],
+[data-a-target="recommended-channel"],
+.home-intro-copy,
+.stream-load-status {
+    display: none !important;
+}
+
+/* Channel page "recommended channels" rail below the player. */
+[data-a-target="channel-channel-left-column"] section:not(:first-of-type),
+.recommended-channel,
+[data-test-selector="recommended-channel"] {
+    display: none !important;
+}

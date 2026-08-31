@@ -1,0 +1,19 @@
+/* No Algorithms — Pinterest
+   Keep: pins, boards, profiles, search, following feed. Remove: the
+   ranked "more ideas" home feed, Today articles, Ideas pages and the
+   endless video feed. Shared overlay tokens are inlined by the build. */
+
+/* Ranked discovery surfaces (JS mounts the overlay on these routes). */
+html.noalg-pinterest-blocked [data-test-id="today-tab-feed"],
+html.noalg-pinterest-blocked [data-test-id="ideas-root-today-articles"],
+html.noalg-pinterest-blocked [data-test-id="masonry-container"],
+html.noalg-pinterest-blocked [role="main"] {
+    visibility: hidden !important;
+}
+
+/* Unauth homepage: carousel of "popular" boards. */
+[data-test-id="boardCard-"] ~ *,
+[data-test-id="carousel-overlay-previous"],
+[data-test-id="carousel-overlay-next"] {
+    display: none !important;
+}

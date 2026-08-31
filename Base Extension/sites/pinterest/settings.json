@@ -1,0 +1,12 @@
+{
+  "website_name": "pinterest",
+  "home_path": "/",
+  "blocked_paths": [],
+  "remove_links_to_path": [
+    "/today",
+    "/ideas",
+    "/videos",
+    "/shopping",
+    "/categories"
+  ]
+}

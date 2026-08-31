@@ -1,0 +1,33 @@
+/* No Algorithms — X (Twitter)
+   Keep: timeline of accounts you follow, post permalinks, profiles,
+   notifications, bookmarks, lists. Remove: the For You ranked feed,
+   Explore/Trending, and every "Who to follow" / "What's happening"
+   recommendation module. Shared overlay tokens are inlined by the build. */
+
+/* For You ranked feed (JS toggles body class when the selected home tab
+   is not Following). */
+body.noalg-x-foryou [data-testid="primaryColumn"] > div:last-child,
+body.noalg-x-foryou div[aria-label="Timeline: Your home timeline"] {
+    visibility: hidden !important;
+    height: 0 !important;
+    overflow: hidden !important;
+}
+
+/* Recommendation modules — right sidebar and inline inserts. */
+[data-testid="sidebarColumn"],
+aside[aria-label*="Who to follow" i],
+section[aria-label*="Who to follow" i],
+div[aria-label*="Who to follow" i],
+div[aria-label*="Trending" i],
+a[href^="/i/topics"],
+nav[aria-label="Explore navigation"],
+[aria-label="Trending" i] {
+    display: none !important;
+}
+
+/* Explore/search routes: covered by the focus overlay; hide the leftover
+   app chrome underneath it. */
+html.noalg-x-blocked [data-testid="primaryColumn"],
+html.noalg-x-blocked [data-testid="sidebarColumn"] {
+    visibility: hidden !important;
+}

@@ -1,0 +1,30 @@
+{
+  "website_name": "twitch",
+  "home_path": "/directory/following",
+  "blocked_paths": [
+    "exact:/",
+    "exact:/directory",
+    "/directory/category",
+    "/directory/all",
+    "/directory/gaming",
+    "/directory/irl",
+    "/directory/music",
+    "/downloads"
+  ],
+  "remove_links_to_path": [
+    "exact:/",
+    "exact:/directory",
+    "/directory/category",
+    "/directory/all",
+    "/directory/gaming",
+    "/directory/irl",
+    "/directory/music",
+    "/downloads"
+  ],
+  "custom_path_titles": [
+    {
+      "path": "/directory/following",
+      "title": "Twitch"
+    }
+  ]
+}

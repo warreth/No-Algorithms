@@ -1,0 +1,11 @@
+{
+  "website_name": "threads",
+  "home_path": "/",
+  "blocked_paths": [
+    "/explore"
+  ],
+  "remove_links_to_path": [
+    "exact:/explore",
+    "/search"
+  ]
+}

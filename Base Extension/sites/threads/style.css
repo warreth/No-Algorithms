@@ -1,0 +1,17 @@
+/* No Algorithms — Threads
+   The entire home feed is ranked ("For you"); there is no chronological
+   alternative, so the feed gets the focus overlay. Profiles and post
+   permalinks stay fully usable. Shared overlay tokens are inlined. */
+
+/* Home feed (For you) — JS mounts the overlay and adds the class. */
+body.noalg-threads-blocked div[role="feed"],
+body.noalg-threads-blocked main,
+body.noalg-threads-blocked [data-testid="thread-item"] {
+    visibility: hidden !important;
+}
+
+/* "For you" / suggested-user modules injected anywhere. */
+div[aria-label*="For you" i],
+div[aria-label*="Suggested" i] {
+    display: none !important;
+}
