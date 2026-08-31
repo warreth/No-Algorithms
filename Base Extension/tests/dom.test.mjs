@@ -208,7 +208,117 @@ function makeDom(url, html) {
 }
 
 // --------------------------------------------------------------------------
-// 6. Timer mounts on every site.
+// 6. X: explore gets the overlay; home hides the For You feed chrome only
+//    when the For You tab is selected; Following keeps the timeline.
+// --------------------------------------------------------------------------
+{
+  const dom = makeDom("https://x.com/explore", `<!doctype html><html><body>
+    <div data-testid="primaryColumn"><h2>Explore</h2></div>
+    <div data-testid="sidebarColumn"><aside>Who to follow</aside></div>
+  </body></html>`);
+  boot(dom);
+  const doc = dom.window.document;
+  assert.ok(await waitFor(() => doc.getElementById("noalg-x-focus")), "overlay on explore");
+  assert.ok(doc.documentElement.classList.contains("noalg-x-blocked"), "explore masked");
+  assert.ok(doc.querySelector('[data-testid="sidebarColumn"]').classList.contains("noalg-hidden"),
+    "sidebar hidden even on blocked routes");
+
+  // Home with For You selected: timeline chrome hidden, tabs kept.
+  const dom2 = makeDom("https://x.com/home", `<!doctype html><html><body>
+    <div data-testid="primaryColumn">
+      <div role="tablist">
+        <button role="tab" aria-selected="true">For you</button>
+        <button role="tab" aria-selected="false">Following</button>
+      </div>
+      <div aria-label="Timeline: Your home timeline"><article>post</article></div>
+    </div>
+    <div data-testid="sidebarColumn"></div>
+  </body></html>`);
+  boot(dom2);
+  const doc2 = dom2.window.document;
+  assert.ok(await waitFor(() => doc2.body.classList.contains("noalg-x-foryou")),
+    "for-you tab detected");
+  assert.ok(!doc2.getElementById("noalg-x-focus"), "no overlay on home timeline");
+
+  // Following selected: feed stays.
+  doc2.querySelector('[role="tab"][aria-selected="true"]').setAttribute("aria-selected", "false");
+  doc2.querySelector('[role="tab"]:last-child').setAttribute("aria-selected", "true");
+  dom2.window.history.pushState({}, "", "/");
+  await sleep(250);
+  assert.ok(await waitFor(() => !doc2.body.classList.contains("noalg-x-foryou")),
+    "following tab keeps the feed");
+  console.log("x DOM test passed");
+}
+
+// --------------------------------------------------------------------------
+// 7. Threads: home feed gets the overlay; profile pages stay clean.
+// --------------------------------------------------------------------------
+{
+  const dom = makeDom("https://www.threads.com/", `<!doctype html><html><body>
+    <div role="feed"><article>thread</article></div>
+  </body></html>`);
+  boot(dom);
+  const doc = dom.window.document;
+  assert.ok(await waitFor(() => doc.getElementById("noalg-threads-focus")), "overlay on threads home");
+  assert.ok(doc.body.classList.contains("noalg-threads-blocked"), "feed masked");
+
+  dom.window.history.pushState({}, "", "/@github");
+  await sleep(250);
+  assert.ok(await waitFor(() => !doc.getElementById("noalg-threads-focus")), "overlay gone on profile");
+  assert.ok(!doc.body.classList.contains("noalg-threads-blocked"), "profile unmasked");
+  console.log("threads DOM test passed");
+}
+
+// --------------------------------------------------------------------------
+// 8. Pinterest: today/ideas get the overlay; profile and pin pages stay.
+// --------------------------------------------------------------------------
+{
+  const dom = makeDom("https://www.pinterest.com/today/", `<!doctype html><html><body>
+    <div data-test-id="today-tab-feed"><article>today article</article></div>
+  </body></html>`);
+  boot(dom);
+  const doc = dom.window.document;
+  assert.ok(await waitFor(() => doc.getElementById("noalg-pinterest-focus")), "overlay on today");
+  assert.ok(doc.documentElement.classList.contains("noalg-pinterest-blocked"), "today masked");
+
+  dom.window.history.pushState({}, "", "/github/");
+  await sleep(250);
+  assert.ok(await waitFor(() => !doc.getElementById("noalg-pinterest-focus")), "overlay gone on profile");
+  assert.ok(!doc.documentElement.classList.contains("noalg-pinterest-blocked"), "profile unmasked");
+  console.log("pinterest DOM test passed");
+}
+
+// --------------------------------------------------------------------------
+// 9. Twitch: browse root/directory/category links are rewritten to
+//    /directory/following; the engine redirect itself is covered by
+//    engine.test (jsdom cannot navigate). Channel links stay intact.
+// --------------------------------------------------------------------------
+{
+  const dom = makeDom("https://www.twitch.tv/directory/following", `<!doctype html><html><body>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/directory">Browse</a>
+      <a href="/directory/category/just-chatting">Just Chatting</a>
+      <a href="/esl_csgo">esl_csgo</a>
+    </nav>
+  </body></html>`);
+  boot(dom);
+  const doc = dom.window.document;
+  assert.ok(await waitFor(() =>
+    doc.querySelector('a[og_href="/"]') !== null), "root link rewritten");
+  assert.equal(doc.querySelector('a[og_href="/"]').getAttribute("href"),
+    "/directory/following", "root link goes to following");
+  assert.equal(doc.querySelector('a[og_href="/directory"]').getAttribute("href"),
+    "/directory/following", "browse link rewritten");
+  assert.equal(doc.querySelector('a[og_href="/directory/category/just-chatting"]').getAttribute("href"),
+    "/directory/following", "category link rewritten");
+  assert.equal(doc.querySelector('a[og_href="/esl_csgo"]')?.getAttribute("href") ?? doc.querySelector('a[href="/esl_csgo"]').getAttribute("href"), "/esl_csgo",
+    "channel link untouched");
+  console.log("twitch DOM test passed");
+}
+
+// --------------------------------------------------------------------------
+// 10. Timer mounts on every site.
 // --------------------------------------------------------------------------
 {
   const dom = makeDom("https://www.tiktok.com/", `<!doctype html><html><body>

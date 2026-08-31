@@ -71,6 +71,56 @@ check("snapchat: consumer spotlight redirected to /web", async () => {
   });
 });
 
+// --------------------------------------------------------------------------
+// Twitch: browse root and /directory redirect to /directory/following;
+// channel pages stay untouched.
+// --------------------------------------------------------------------------
+check("twitch: directory redirects to following", async () => {
+  await withExtensionPage("https://www.twitch.tv/directory", async page => {
+    await page.waitForURL(/\/directory\/following/, { timeout: 20000 });
+  });
+});
+
+check("twitch: channel page stays untouched", async () => {
+  await withExtensionPage("https://www.twitch.tv/esl_csgo", async page => {
+    await page.waitForSelector("#noalg-page-timer", { timeout: 20000 });
+    assert.ok(!page.url().includes("following"), "channel page not redirected");
+  });
+});
+
+// --------------------------------------------------------------------------
+// Pinterest: /today gets the focus overlay; profile pages stay clean.
+// --------------------------------------------------------------------------
+check("pinterest: today page gets focus overlay", async () => {
+  await withExtensionPage("https://www.pinterest.com/today/", async page => {
+    await page.waitForSelector("#noalg-pinterest-focus", { timeout: 20000 });
+  });
+});
+
+check("pinterest: profile page stays clean", async () => {
+  await withExtensionPage("https://www.pinterest.com/github/", async page => {
+    await page.waitForSelector("#noalg-page-timer", { timeout: 20000 });
+    const overlay = await page.$("#noalg-pinterest-focus");
+    assert.ok(!overlay, "no overlay on profiles");
+  });
+});
+
+// --------------------------------------------------------------------------
+// Threads: home feed gets the focus overlay (whole feed is ranked).
+// --------------------------------------------------------------------------
+check("threads: home feed gets focus overlay", async () => {
+  await withExtensionPage("https://www.threads.net/", async page => {
+    await page.waitForSelector("#noalg-threads-focus", { timeout: 20000 });
+  });
+});
+
+// --------------------------------------------------------------------------
+// X: x.com/twitter.com hard-block headless-datacenter requests with
+// ERR_HTTP_RESPONSE_CODE_FAILURE (curl gets 200, real Chromium does not),
+// so live e2e cannot drive it from this environment. X coverage lives in
+// dom.test.mjs (explore overlay, For You detection, sidebar hiding).
+// --------------------------------------------------------------------------
+
 let failed = 0;
 for (const [name, fn] of results) {
   try {

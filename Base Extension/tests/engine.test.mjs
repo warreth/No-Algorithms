@@ -126,6 +126,104 @@ async function bootEngine(url, html) {
   assert.equal(ctx.replacements.length, 0, "chat web app never redirected");
 }
 
+// --- X -------------------------------------------------------------------------
+
+{
+  const ctx = await bootEngine("https://x.com/explore");
+  // Explore is an overlay route, not an engine redirect — assert NO replace.
+  assert.equal(ctx.replacements.length, 0, "explore handled by overlay, not redirect");
+}
+{
+  const ctx = await bootEngine("https://x.com/home");
+  assert.equal(ctx.replacements.length, 0, "following timeline never redirected");
+}
+{
+  const ctx = await bootEngine("https://twitter.com/warreth/status/123");
+  assert.equal(ctx.replacements.length, 0, "twitter.com post permalinks never redirected");
+}
+
+// --- Threads -------------------------------------------------------------------
+
+{
+  const ctx = await bootEngine("https://www.threads.com/");
+  assert.equal(ctx.replacements.length, 0, "threads root handled by overlay, not redirect");
+}
+{
+  const ctx = await bootEngine("https://www.threads.com/@github");
+  assert.equal(ctx.replacements.length, 0, "threads profiles never redirected");
+}
+{
+  const ctx = await bootEngine("https://www.threads.com/post/Cx123");
+  assert.equal(ctx.replacements.length, 0, "threads post permalinks never redirected");
+}
+
+// --- Pinterest -------------------------------------------------------------------
+
+{
+  const ctx = await bootEngine("https://www.pinterest.com/today/");
+  assert.equal(ctx.replacements.length, 0, "pinterest today handled by overlay, not redirect");
+}
+{
+  const ctx = await bootEngine("https://www.pinterest.com/github/");
+  assert.equal(ctx.replacements.length, 0, "pinterest profiles never redirected");
+}
+{
+  const ctx = await bootEngine("https://www.pinterest.com/pin/12345/");
+  assert.equal(ctx.replacements.length, 0, "pin permalinks never redirected");
+}
+{
+  const ctx = await bootEngine("https://www.pinterest.com/search/pins/?q=desk");
+  assert.equal(ctx.replacements.length, 0, "search never redirected");
+}
+
+// --- Twitch -----------------------------------------------------------------------
+
+{
+  const ctx = await bootEngine("https://www.twitch.tv/");
+  assert.equal(ctx.replacements[0], "https://www.twitch.tv/directory/following",
+    "twitch root redirects to following");
+}
+{
+  const ctx = await bootEngine("https://www.twitch.tv/directory");
+  assert.equal(ctx.replacements[0], "https://www.twitch.tv/directory/following",
+    "browse directory redirects to following");
+}
+{
+  const ctx = await bootEngine("https://www.twitch.tv/directory/following");
+  assert.equal(ctx.replacements.length, 0, "following page is the home, never redirected");
+}
+{
+  const ctx = await bootEngine("https://www.twitch.tv/directory/category/just-chatting");
+  assert.equal(ctx.replacements[0], "https://www.twitch.tv/directory/following",
+    "category browse redirects to following");
+}
+{
+  const ctx = await bootEngine("https://www.twitch.tv/esl_csgo");
+  assert.equal(ctx.replacements.length, 0, "channel pages never redirected");
+}
+{
+  const ctx = await bootEngine("https://www.twitch.tv/downloads");
+  assert.equal(ctx.replacements[0], "https://www.twitch.tv/directory/following",
+    "downloads redirects to following");
+}
+
+// --- YouTube: new discovery routes --------------------------------------------------
+
+{
+  const ctx = await bootEngine("https://www.youtube.com/feed/trending");
+  assert.equal(ctx.replacements[0], "https://www.youtube.com/feed/subscriptions",
+    "trending redirects to subscriptions");
+}
+{
+  const ctx = await bootEngine("https://www.youtube.com/feed/music");
+  assert.equal(ctx.replacements[0], "https://www.youtube.com/feed/subscriptions",
+    "music feed redirects to subscriptions");
+}
+{
+  const ctx = await bootEngine("https://www.youtube.com/@somechannel");
+  assert.equal(ctx.replacements.length, 0, "channel pages never redirected");
+}
+
 console.log("engine.test: all assertions passed");
 // The vm contexts keep live intervals; exit explicitly.
 process.exit(0);

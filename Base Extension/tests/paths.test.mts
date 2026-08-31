@@ -94,6 +94,16 @@ function rulesFor(partial: Partial<Settings>): ReturnType<typeof compilePathRule
   // both snapchat hosts hit the one rule
   assert.equal(getActiveRules("web.snapchat.com").length, 1);
   assert.equal(getActiveRules("www.snapchat.com").length, 1);
+
+  // the new sites register exactly once on their real hostnames
+  assert.equal(getActiveRules("x.com").length, 1);
+  assert.equal(getActiveRules("twitter.com").length, 1, "x rule covers twitter.com");
+  assert.equal(getActiveRules("threads.com").length, 1);
+  assert.equal(getActiveRules("www.threads.net").length, 0, "threads.net redirects to .com");
+  assert.equal(getActiveRules("www.pinterest.com").length, 1);
+  assert.equal(getActiveRules("pinterest.co.uk").length, 0, "no rule without a match");
+  assert.equal(getActiveRules("www.twitch.tv").length, 1);
+  assert.equal(getActiveRules("evil-twitch.tv").length, 0, "must not substring-match");
 }
 
 console.log("paths.test: all assertions passed");
