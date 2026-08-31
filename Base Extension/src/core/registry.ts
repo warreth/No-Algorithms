@@ -6,6 +6,10 @@ import { tiktokRule } from "../sites/tiktok.ts";
 import { facebookRule } from "../sites/facebook.ts";
 import { githubRule } from "../sites/github.ts";
 import { snapchatRule } from "../sites/snapchat.ts";
+import { xRule } from "../sites/x.ts";
+import { threadsRule } from "../sites/threads.ts";
+import { pinterestRule } from "../sites/pinterest.ts";
+import { twitchRule } from "../sites/twitch.ts";
 
 const siteRules: SiteRule[] = [
     youtubeRule,
@@ -14,10 +18,17 @@ const siteRules: SiteRule[] = [
     tiktokRule,
     facebookRule,
     githubRule,
-    snapchatRule
+    snapchatRule,
+    xRule,
+    threadsRule,
+    pinterestRule,
+    twitchRule
 ];
 
-/** Hostname matches when the registered domain is a suffix of it. */
+/** Hostname matches when a registered domain is a suffix of it. */
 export function getActiveRules(hostname: string): SiteRule[] {
-    return siteRules.filter(rule => hostname === rule.domain || hostname.endsWith("." + rule.domain));
+    return siteRules.filter(rule => {
+        const domains = Array.isArray(rule.domain) ? rule.domain : [rule.domain];
+        return domains.some(d => hostname === d || hostname.endsWith("." + d));
+    });
 }

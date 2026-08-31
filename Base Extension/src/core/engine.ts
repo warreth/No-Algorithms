@@ -29,18 +29,25 @@ export class Engine {
 
     this.watchRoute();
     this.observeMutations();
+    // First pass without waiting for a mutation: a fully server-rendered
+    // page may never mutate, but its links still need rewriting.
+    this.scheduleMutationBatch();
   }
 
-  /** Fetch sites/<site>/settings.json for the current origin, if any. */
+  /** Fetch sites/<site>/settings.json for the current origin, if any.
+   *  A folder matches when one of the active rules' domains is the folder
+   *  plus a public suffix (".com"), so twitter.com resolves sites/x/
+   *  via the x.com rule. */
   private async loadSettings(): Promise<Settings | null> {
     if (typeof chrome === "undefined" || !chrome.runtime?.getURL) return null;
     const siteList: string[] = await (await fetch(chrome.runtime.getURL("sites/index.json"))).json();
-    for (const folder of siteList) {
-      if (!this.location.origin.includes(folder)) continue;
-      const url = chrome.runtime.getURL(`sites/${folder}/settings.json`);
-      return await (await fetch(url)).json();
-    }
-    return null;
+    const domains = this.activeRules.flatMap(r => (Array.isArray(r.domain) ? r.domain : [r.domain]));
+    const folder = siteList.find(f =>
+      domains.some(d => d === f || d.endsWith("." + f) || d.startsWith(f + "."))
+    );
+    if (!folder) return null;
+    const url = chrome.runtime.getURL(`sites/${folder}/settings.json`);
+    return await (await fetch(url)).json();
   }
 
   // --- Redirection -----------------------------------------------------

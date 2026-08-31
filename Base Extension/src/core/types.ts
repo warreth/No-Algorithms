@@ -16,8 +16,9 @@ export interface Settings {
 
 /** A per-site behaviour module. All callbacks are optional. */
 export interface SiteRule {
-  /** Domain suffix to match, e.g. "youtube.com". */
-  domain: string;
+  /** Domain suffix to match, e.g. "youtube.com". Sites that answer on
+   *  several apex domains (x.com + twitter.com) list them all. */
+  domain: string | string[];
   /** Run once when the site is first matched and the engine starts. */
   onInit?: () => void;
   /** Run on every DOM mutation batch. Must be cheap and idempotent. */
