@@ -4,11 +4,13 @@
   "blocked_paths": [
     "exact:/reels/",
     "exact:/reels",
-    "/explore"
+    "/explore",
+    "/audio"
   ],
   "remove_links_to_path": [
     "exact:/reels/",
     "exact:/reels",
-    "/explore"
+    "/explore",
+    "/audio"
   ]
 }

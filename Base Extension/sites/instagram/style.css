@@ -1,36 +1,43 @@
-/* Hide Reels, Explore tabs globally but leave reels loaded inline in feeds working */
-a:has(svg[aria-label="Reels"]),
-a:has(svg[aria-label="Explore"]),
-a:has(svg[aria-label="Zoeken"]),
-a:has(svg[aria-label="Search"]),
-a:has(svg[name="explore"])
+/* No Algorithms — Instagram
+   The followed feed, DMs, stories, profiles and SEARCH stay untouched.
+   Removed: Reels tab and permalinks, Explore, and every recommended /
+   sponsored / ad unit detected by the content script. */
+
+/* Nav entries — href-scoped so the Search icon and DMs never break. */
+a[href="/reels/"],
+a[href^="/reels/"],
+a[href^="/explore"],
+a[href^="/audio/"],
+
+/* Profile Reels sub-tab (JS also hides these; CSS is the fast path). */
+main a[href$="/reels/"]
+
 {
     display: none !important;
 }
 
+/* Recommended / sponsored / ad units flagged by the content script.
+   Hiding the wrapper (parent with <=2 children) kills the half-post
+   artifacts and the infinite-load spinner too. */
+article[data-noalg-hide="true"],
+[data-noalg-hide="true"],
+[data-noalg-verdict="blocked"]
 
-/* Hide recommendations in feed and completely hide their containers to prevent half-post artifacts or infinite loading spinners */
-article[isRecommendation="true"],
-[data-noalg-hide-parent="true"] {
+{
     display: none !important;
     height: 0 !important;
     width: 0 !important;
     overflow: hidden !important;
 }
 
-/* Prevent scrolling to the next video when viewing a single reel from DMs or Explore */
+/* Single reel opened from a DM: kill the next/prev affordances so it
+   cannot become a scrollable feed. */
 body.noalg-reel-view [aria-label*="Next"],
 body.noalg-reel-view [aria-label*="next"],
 body.noalg-reel-view .coreSpriteRightChevron,
 body.noalg-reel-view ._aaqg ._aaqf,
 body.noalg-reel-view button:has(svg[aria-label="Next"])
+
 {
     display: none !important;
 }
-
-/* Remove the aggressive lock on main to prevent breaking DMs */
-
- /* Hide generic explore tabs */ 
- a[href^='/explore'] { display: none !important; }
-
- body.noalg-reel-view svg[aria-label='Next'] { display: none !important; }
