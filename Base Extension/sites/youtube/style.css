@@ -115,3 +115,33 @@ ytd-comments,
 #info-card-button:hover {
     background-color: rgba(0, 0, 0, 0.8);
 }
+
+/* --- Explore/discovery routes ------------------------------------------- */
+
+/* Guide entries: Trending, Music, Gaming, Sports, News, Courses,
+   Podcasts (link-rewrite also removes these anchors). */
+ytd-guide-entry-renderer:has(a[href="/feed/trending"]),
+ytd-guide-entry-renderer:has(a[href="/feed/music"]),
+ytd-guide-entry-renderer:has(a[href="/feed/gaming"]),
+ytd-guide-entry-renderer:has(a[href="/feed/sports"]),
+ytd-guide-entry-renderer:has(a[href="/feed/news"]),
+ytd-guide-entry-renderer:has(a[href="/feed/courses"]),
+ytd-guide-entry-renderer:has(a[href="/podcasts"]),
+ytd-guide-entry-renderer:has(a[href="/gaming"]),
+ytd-mini-guide-entry-renderer:has(a[href^="/feed/trending"]),
+ytd-mini-guide-entry-renderer:has(a[href^="/feed/music"]),
+ytd-mini-guide-entry-renderer:has(a[href^="/feed/gaming"]),
+
+/* Trending/Explore shelves and chips on any remaining surface. */
+ytd-rich-section-renderer:has(a[href^="/feed/trending"]),
+ytd-rich-section-renderer:has(ytd-rich-shelf-renderer a[href^="/chart_"]),
+ytd-item-section-renderer:has(a[href^="/feed/trending"]),
+.ytChipBarViewModelChipWrapper:has(button[aria-label="Trending"]),
+.ytChipBarViewModelChipWrapper:has(button[aria-label="Music"]),
+.ytChipBarViewModelChipWrapper:has(button[aria-label="Gaming"]),
+.ytChipBarViewModelChipWrapper:has(button[aria-label="Sports"]),
+.ytChipBarViewModelChipWrapper:has(button[aria-label="News"]),
+.ytChipBarViewModelChipWrapper:has(button[aria-label="Podcasts"]),
+ytd-video-renderer:has(a[href^="/feed/trending"]) {
+    display: none !important;
+}
