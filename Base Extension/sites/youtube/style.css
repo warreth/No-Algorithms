@@ -1,16 +1,24 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+/* No Algorithms — YouTube
+   Subscriptions-only browsing: home feed redirects to /feed/subscriptions,
+   Shorts are removed everywhere, watch pages blur+disable recommendations
+   and hide comments. Shared overlay tokens are inlined by the build. */
 
-/* Sites Mobile */
+/* --- Mobile ------------------------------------------------------------ */
 
-/* Home Page (removed shorts and home+shorts buttons on the bottom) */
 ytm-rich-section-renderer:has(a[href*="/shorts/"]),
 ytm-rich-item-renderer:has(a[href*="/shorts/"]),
 ytm-video-with-context-renderer:has(a[href*="/shorts/"]),
 ytm-item-section-renderer:has(a[href*="/shorts/"]),
 ytm-pivot-bar-item-renderer:has(.pivot-w2w),
 ytm-pivot-bar-item-renderer:has(.pivot-shorts),
+lazy-list > ytm-reel-shelf-renderer {
+    display: none !important;
+    height: 0 !important;
+    width: 0 !important;
+}
 
-    /* Shorts Grid Elements */
+/* --- Shorts shelves and cards, all surfaces ----------------------------- */
+
 #contents.ytd-rich-grid-renderer ytd-rich-item-renderer:has(a[href*="/shorts/"]),
 #contents.ytd-rich-grid-renderer ytd-rich-section-renderer:has(a[href*="/shorts/"]),
 ytd-video-renderer:has(a[href*="/shorts/"]),
@@ -19,57 +27,68 @@ ytd-compact-video-renderer:has(a[href*="/shorts/"]),
 ytd-reel-item-renderer,
 ytd-reel-shelf-renderer,
 ytd-rich-shelf-renderer[is-shorts],
+ytd-reel-shelf-renderer:has(#title),
+.ytChipBarViewModelChipWrapper:has(button[aria-label="Shorts"]),
+.yt-tab-shape[tab-title="Shorts"],
+ytd-search-filter-renderer:has(div[title*="Shorts"]),
+grid-shelf-view-model:has(a[og_href*="shorts"]),
 
-    /* Video Page (removed reccomendations) */
-[section-identifier="related-items"],
+/* Notifications about shorts */
+ytd-notification-renderer:has(a[href*="shorts"]),
+ytd-notification-renderer:has(a[og_href*="shorts"]),
 
-    /* Watch History Page */
-lazy-list > ytm-reel-shelf-renderer
-
-{
+/* Guide entries: shorts, music, "More from YouTube" */
+ytd-guide-section-renderer:has(a[title="Shorts"]),
+ytd-guide-section-renderer:has(a[title="Music"]),
+ytd-guide-section-renderer:has(a[href="/premium"]),
+ytd-guide-section-renderer:has(a[href="/gaming"]),
+ytd-guide-section-renderer:has([title="More from YouTube"]),
+ytd-guide-section-renderer[guide-persistent-and-visible],
+ytd-mini-guide-entry-renderer:has(a[title="Shorts"]),
+ytd-guide-entry-renderer:has(a[title="Shorts"]),
+a[aria-label="Shorts"],
+a[aria-label="Home"] {
     display: none !important;
-    height: 0 !important;
-    width: 0 !important;
 }
 
-/* Sites Desktop */
+/* --- Watch page -------------------------------------------------------- */
 
-/* Video Page (removed reccomendations) */
+/* Disable the recommendations sidebar (the info card sits above it). */
 #related {
-    pointer-events: none;       /* block all clicks */
+    pointer-events: none;
     overflow: hidden;
-    width: auto;                /* keep natural width for the pop */
-    opacity: 1;
-    filter: blur(0px);
-    transform: translateX(0);   /* start position */
-    /* removed animation */ /* triggers animation */
 }
+
+/* Hard-hide the recommendation containers and comments. */
+ytd-watch-next-secondary-results-renderer,
+ytd-item-section-renderer[target-id="watch-next-feed"],
+ytd-comments,
+#comments,
+.ytd-comments {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    height: 0 !important;
+}
+
+/* --- Info card ("What next? YOU decide.") ------------------------------ */
 
 #info-card {
-    font-family: 'Manrope', sans-serif;
-
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
     width: 100%;
     min-height: 250px;
     height: 100%;
     margin-bottom: 20px;
-    margin-top: 0;
-
     border-radius: 10px;
-
-    /* Strong but intentional */
     background: rgb(246, 246, 246);
-
     color: black;
-
     text-align: center;
 }
 
-/* top label */
 #info-card-top-text {
     font-size: 13px;
     font-weight: 400;
@@ -77,7 +96,6 @@ lazy-list > ytm-reel-shelf-renderer
     opacity: 0.7;
 }
 
-/* main statement */
 #info-card-main-text {
     font-size: 26px;
     font-weight: 700;
@@ -87,144 +105,13 @@ lazy-list > ytm-reel-shelf-renderer
 #info-card-button {
     width: 200px;
     height: 50px;
-
     color: white;
     background-color: black;
-
     border-color: transparent;
     border-radius: 50px;
+    cursor: pointer;
 }
 
 #info-card-button:hover {
     background-color: rgba(0, 0, 0, 0.8);
-}
-
-/* Chanel Page (removed Shorts tab) */
-.yt-tab-shape[tab-title="Shorts"] {
-    display: none;
-    height: 0;
-    width: 0;
-}
-
-/* Watch History Page (removed shorts tab) */
-ytd-reel-shelf-renderer:has(#title) { display: none; width: 0; height: 0 ;}
-
-.ytChipBarViewModelChipWrapper:has(button[aria-label="Shorts"])
-{
-    display: none;
-    height: 0;
-    width: 0;
-}
-
-/* Notifications (removed shorts) */
-ytd-notification-renderer:has(a[href*="shorts"]),
-ytd-notification-renderer:has(a[og_href*="shorts"]),
-
-/* Home Page (removed shorts and home+shorts buttons) */
-ytd-guide-section-renderer:has(a[title="Shorts"]),
-ytd-guide-section-renderer:has(a[title="Music"]),
-ytd-rich-shelf-renderer:has(a[href*="shorts"]),
-ytd-rich-shelf-renderer:has(a[og_href*="shorts"]),
-ytd-guide-section-renderer[guide-persistent-and-visible],
-a[aria-label="Shorts"],
-a[aria-label="Home"]
-{
-    height: 0;
-    width: 0;
-    display: none;
-}
-/* Video Search Page */
-grid-shelf-view-model:has(a[og_href*="shorts"]),
-iron-selector > :nth-child(2),
-ytd-search-filter-renderer:has(div[title*="Shorts"])
-
-{
-    height: 0;
-    width: 0;
-    display: none;
-}
-
-/* Animations */
-
-/* Keyframes: pop out right a bit, then slide left + fade + blur */
-@keyframes popSlideFade {
-    0% {
-        opacity: 1;
-        filter: blur(3px);
-        transform: translateX(0);
-    }
-    15% {
-        opacity: 1;
-        filter: blur(3px);
-        transform: translateX(0);
-    }
-    100% {
-        opacity: 0;
-        filter: blur(35px);
-        transform: translateX(-50px); /* slide left while disappearing */
-    }
-}
-
-@keyframes shrinkFade {
-    0% {
-        opacity: 1;
-        filter: blur(3px);
-    }
-    100% {
-        opacity: 0;
-        filter: blur(35px);
-        margin-right: -45px;
-    }
-}
-
-@keyframes shrinkFadeABitMore {
-    0% {
-        opacity: 1;
-        filter: blur(3px);
-    }
-    100% {
-        opacity: 0;
-        filter: blur(35px);
-        margin-right: -65px;
-    }
-}
-
-/* --- UBLOCK INSPIRED FAST HIDING --- */
-
-/* Hide the Mini Guide Shorts Button */
-ytd-mini-guide-entry-renderer:has(a[title="Shorts"]) {
-    display: none !important;
-}
-
-/* Hide the Main Guide Shorts Button */
-ytd-guide-entry-renderer:has(a[title="Shorts"]) {
-    display: none !important;
-}
-
-/* Hard-hide "More from YouTube" */
-ytd-guide-section-renderer:has([title="More from YouTube"]),
-ytd-guide-section-renderer:has(a[href="/premium"]),
-ytd-guide-section-renderer:has(a[href="/gaming"]),
-ytd-guide-section-renderer:has(a[href="/channel/UC-9-kyTW8ZkZNDHQJ6FgwNA"]) {
-    display: none !important;
-}
-
-/* Fix whitespace above comments by hiding empty related sections completely */
-ytd-watch-next-secondary-results-renderer,
-ytd-item-section-renderer[target-id="watch-next-feed"] {
-    display: none !important;
-}
-
-#related {
-    display: none !important;
-}
-
-/* Hide comments section completely to maintain focus and avoid rabbit holes */
-ytd-comments,
-#comments,
-.ytd-comments {
-    display: none !important;
-    opacity: 0 !important;
-    visibility: hidden !important;
-    height: 0 !important;
 }

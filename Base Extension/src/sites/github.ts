@@ -43,17 +43,20 @@ function suppressHomeFeed(): void {
 const BLOCKED_LINK_RE = /^\/(trending|topics|collections|events|sponsors\/explore|explore|feed)(\/|$)/;
 
 function hideBlockedLinks(): void {
-  document.querySelectorAll<HTMLAnchorElement>("a[href]").forEach(link => {
-    if (link.dataset.noalgLinkSeen === "1") return;
-    link.dataset.noalgLinkSeen = "1";
-    let pathname: string;
-    try {
-      pathname = new URL(link.getAttribute("href") || "", location.origin).pathname;
-    } catch {
-      return;
-    }
-    if (BLOCKED_LINK_RE.test(pathname)) link.classList.add("noalg-hidden");
-  });
+  // :not() keeps this incremental — already-seen anchors are skipped by
+  // the selector engine itself instead of a JS loop.
+  document
+    .querySelectorAll<HTMLAnchorElement>("a[href]:not([data-noalg-link-seen])")
+    .forEach(link => {
+      link.dataset.noalgLinkSeen = "1";
+      let pathname: string;
+      try {
+        pathname = new URL(link.getAttribute("href") || "", location.origin).pathname;
+      } catch {
+        return;
+      }
+      if (BLOCKED_LINK_RE.test(pathname)) link.classList.add("noalg-hidden");
+    });
 }
 
 /** Repo "Insights > Pulse" — a short-term activity dopamine page. */

@@ -54,6 +54,27 @@ async function copyDir(src, dest) {
     }
 }
 
+/**
+ * Prepends sites/shared/overlay.css to every sites/<site>/style.css in the
+ * build output. Extension content CSS cannot reliably @import across files,
+ * so the shared design tokens are inlined at build time: one source of
+ * truth, zero runtime requests, uniform UI everywhere.
+ */
+async function inlineSharedCss(sitesOutDir) {
+    const sharedCss = await fs.readFile(path.join(ROOT_DIR, 'sites', 'shared', 'overlay.css'), 'utf-8');
+    const entries = await fs.readdir(sitesOutDir, { withFileTypes: true });
+    for (const entry of entries) {
+        if (!entry.isDirectory()) continue;
+        const siteCss = path.join(sitesOutDir, entry.name, 'style.css');
+        try {
+            const css = await fs.readFile(siteCss, 'utf-8');
+            await fs.writeFile(siteCss, `/* shared overlay tokens (inlined by build) */\n${sharedCss}\n${css}`);
+        } catch {
+            // Site without a style.css — skip.
+        }
+    }
+}
+
 async function buildTarget(target) {
     console.log(`Building for ${target}...`);
     const outDir = path.join(ROOT_DIR, 'build', target);
@@ -64,10 +85,11 @@ async function buildTarget(target) {
 
     // Copy compiled JS
     await copyDir(path.join(ROOT_DIR, 'dist'), path.join(outDir, 'dist'));
-    
-    // Copy assets
+
+    // Copy assets, then inline the shared overlay CSS into each site bundle.
     await copyDir(path.join(ROOT_DIR, 'sites'), path.join(outDir, 'sites'));
     await copyDir(path.join(ROOT_DIR, 'icons'), path.join(outDir, 'icons'));
+    await inlineSharedCss(path.join(outDir, 'sites'));
 
     // Process manifest
     const manifestRaw = await fs.readFile(path.join(ROOT_DIR, 'manifest.json'), 'utf-8');

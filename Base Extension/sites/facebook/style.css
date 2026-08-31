@@ -1,4 +1,9 @@
-/* Hide reels/watch/gaming tabs in top nav / sidebars */
+/* No Algorithms — Facebook
+   Reels, Watch, Gaming, Meta AI and the ranked home feed are removed;
+   profiles, groups and events stay usable. Shared overlay tokens are
+   inlined by the build. */
+
+/* Reels / watch / gaming surfaces in top nav, sidebars and feeds. */
 a[href*="/reels/"],
 a[href*="/reel/"],
 a[href*="/watch/"],
@@ -6,29 +11,17 @@ a[href*="/gaming/"],
 [aria-label="Reels"],
 [aria-label="Gaming"],
 [aria-label="Watch"],
-[aria-label*="Reels"] {
-    display: none !important;
-}
+[aria-label*="Reels"],
 
-/* Hide Meta AI */
-div[aria-label*="Meta AI"] {
-    display: none !important;
-}
-
-/* Hide comment UI */
+/* Meta AI and comment UI. */
+div[aria-label*="Meta AI"],
+[aria-label*="manus ai" i],
 div[aria-label="Leave a comment"],
 div[aria-label*="Comment"],
 form[aria-label="Comment"],
-[aria-label="Write a comment"] {
-    display: none !important;
-}
+[aria-label="Write a comment"],
 
-/* Hide manus ai */
-[aria-label*="manus ai" i] {
-    display: none !important;
-}
-
-/* Hide algo posts identified by JS */
+/* Algo posts flagged by the content script. */
 .noalgo-hidden {
     display: none !important;
 }

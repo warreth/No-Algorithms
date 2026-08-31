@@ -1,21 +1,23 @@
-/* Restrict Reddit to post pages only */
+/* No Algorithms — Reddit
+   Post pages only; every other surface (home feed, popular, all) gets the
+   shared focus overlay. Shared overlay tokens are inlined by the build. */
 
-/* Hide everything by default on non-comment pages, except top nav so they aren't stuck. */
+/* Hide the feed everywhere except post pages. */
 body:not(.noalg-post-page) #main-content,
 body:not(.noalg-post-page) shreddit-feed,
 body:not(.noalg-post-page) .subgrid-container {
     display: none !important;
 }
 
-/* Also hide sidebars anywhere to avoid rabbit holes */
-reddit-sidebar-nav, 
+/* Sidebars are rabbit holes anywhere on the site. */
+reddit-sidebar-nav,
 #right-sidebar-container,
 [slot="right-sidebar"],
 #left-sidebar-container {
     display: none !important;
 }
 
-/* Hide the search bar across the site */
+/* Site-wide search bar. */
 shreddit-search-bar,
 #AppRouter-main-content shreddit-search-bar,
 search-dynamic-id-cache-wrapper,
@@ -26,56 +28,7 @@ search-dynamic-id-cache-wrapper,
     visibility: hidden !important;
 }
 
-/* Focus Overview Overlay on non-post pages */
-#noalg-reddit-focus {
-    position: fixed;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    background: transparent;
-    color: var(--color-neutral-content-strong, #1c1c1c);
-    padding: 60px;
-    z-index: 999999;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-#noalg-reddit-focus h1 {
-    font-size: 32px;
-    margin-bottom: 16px;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-}
-#noalg-reddit-focus p {
-    font-size: 18px;
-    opacity: 0.7;
-    max-width: 400px;
-    line-height: 1.5;
-    margin-bottom: 24px;
-}
+/* Focus overlay only shows off post pages. */
 body.noalg-post-page #noalg-reddit-focus {
     display: none !important;
-}
-
-/* Sponsor link styling */
-.noalg-sponsor-link {
-    font-size: 12px;
-    color: inherit;
-    opacity: 0.4;
-    text-decoration: none;
-    margin-top: 32px;
-    transition: opacity 0.2s;
-    font-weight: 500;
-}
-.noalg-sponsor-link:hover {
-    opacity: 0.8 !important;
-}
-
-@media (prefers-color-scheme: dark) {
-    #noalg-reddit-focus {
-        color: #f1f1f1;
-    }
 }
