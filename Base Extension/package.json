@@ -19,10 +19,10 @@
     "pack": "node scripts/pack.mjs",
     "watch": "nodemon --watch src --watch sites --ext ts,css,json --exec \"npm run build:all\"",
     "lint": "node node_modules/web-ext/bin/web-ext.js lint -s build/firefox",
-    "dev:firefox": "npm run build:all && npm run lint && concurrently \"npm run watch\" \"web-ext run -s build/firefox\"",
-    "dev:chrome": "npm run build:all && concurrently \"npm run watch\" \"web-ext run -t chromium -s build/chrome\""
+    "dev:firefox": "npm run build:all && npm run lint && concurrently \"npm run watch\" \"node node_modules/web-ext/bin/web-ext.js run -s build/firefox\"",
+    "dev:chrome": "npm run build:all && concurrently \"npm run watch\" \"node node_modules/web-ext/bin/web-ext.js run -t chromium -s build/chrome --chromium-binary /usr/bin/chromium\""
   },
   "name": "no-algorithms-warreth",
   "author": "WarreTh",
-  "version": "1.2.0"
+  "version": "1.0.0"
 }
